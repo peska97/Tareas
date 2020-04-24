@@ -40,6 +40,7 @@ public class Tarea {
     }
 
 
+
     public String getTitulo(){
         return this.titulo;
     }

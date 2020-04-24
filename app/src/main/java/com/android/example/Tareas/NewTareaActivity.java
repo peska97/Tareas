@@ -30,7 +30,8 @@ import com.android.example.Tareas.R;
 
 import java.util.Calendar;
 
-import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_WORD;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
 
 /**
  * This class displays a screen where the user enters a new word.
@@ -40,7 +41,8 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_WORD;
  */
 public class NewTareaActivity extends AppCompatActivity {
 
-    public static final String EXTRA_REPLY = "com.example.android.roomwordsample.REPLY";
+    public static final String EXTRA_TITULO = "EXTRA_TITULO";
+    public static final String EXTRA_DESCRIPCION = "EXTRA_DESCRIPCION";
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
@@ -74,11 +76,18 @@ public class NewTareaActivity extends AppCompatActivity {
         //cuando accedas a la clase por medio de click en item
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String tarea = extras.getString(EXTRA_DATA_UPDATE_WORD, "");
-            if (!tarea.isEmpty()) {
-                mEditTituloView.setText(tarea);
-                mEditTituloView.setSelection(tarea.length());
+            String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
+            if (!titulo.isEmpty()) {
+                mEditTituloView.setText(titulo);
+                mEditTituloView.setSelection(titulo.length());
                 mEditTituloView.requestFocus();
+                mFinalizado.setVisibility(View.VISIBLE);
+            }
+            String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
+            if (!descripcion.isEmpty()) {
+                mEditDescripcionView.setText(descripcion);
+                mEditDescripcionView.setSelection(descripcion.length());
+                mEditDescripcionView.requestFocus();
                 mFinalizado.setVisibility(View.VISIBLE);
             }
 
@@ -100,8 +109,8 @@ public class NewTareaActivity extends AppCompatActivity {
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
-                    replyIntent.putExtra(EXTRA_REPLY, titulo);
-                    replyIntent.putExtra(EXTRA_REPLY, descripcion);
+                    replyIntent.putExtra(EXTRA_TITULO, titulo);
+                    replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
                     // Establece el estado del resultado para indicar éxito.
                     setResult(RESULT_OK, replyIntent);
                 }

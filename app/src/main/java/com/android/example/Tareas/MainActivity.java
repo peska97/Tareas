@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     //click en item
     public static final int UPDATE_WORD_ACTIVITY_REQUEST_CODE = 2;
-    public static final String EXTRA_DATA_UPDATE_WORD = "extra_tarea_to_be_updated";
+    public static final String EXTRA_DATA_UPDATE_TITULO = "extra_data_update_titulo";
+    public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,10 +161,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Tarea titulo = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_REPLY));
+            String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
+            String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
+            Tarea tarea = new Tarea(titulo,  descripcion);
 
             //Guarda los datos
-            mTareaViewModel.insert(titulo);
+            mTareaViewModel.insert(tarea);
         } else {
             Toast.makeText(
                     this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
@@ -173,7 +176,8 @@ public class MainActivity extends AppCompatActivity {
     //click en item
     public void clickenitem( Tarea tarea) {
         Intent intent = new Intent(this, NewTareaActivity.class);
-        intent.putExtra(EXTRA_DATA_UPDATE_WORD, tarea.getTitulo());
+        intent.putExtra(EXTRA_DATA_UPDATE_TITULO, tarea.getTitulo());
+        intent.putExtra(EXTRA_DATA_UPDATE_DESCRIPCION, tarea.getDescripcion());
         startActivityForResult(intent, UPDATE_WORD_ACTIVITY_REQUEST_CODE);
     }
 }

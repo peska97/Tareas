@@ -79,6 +79,9 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         private static String [] titulos = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
                 "Hacer la colada", "Fregar los platos"};
 
+        private static String [] descripciones = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
+                "Hacer la colada", "Fregar los platos"};
+
         PopulateDbAsync(TareaRoomDatabase db) {
             mDao = db.TareaDao();
         }
@@ -88,7 +91,7 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
             //aqui se comprueba que la BBDD esta vacia
             if (mDao.getAnyTarea().length < 1) {
                 for (int i = 0; i <= titulos.length - 1; i++) {
-                    Tarea tarea = new Tarea(titulos[i]);
+                    Tarea tarea = new Tarea(titulos[i], descripciones[i]);
                     mDao.insert(tarea);
                 }
             }
