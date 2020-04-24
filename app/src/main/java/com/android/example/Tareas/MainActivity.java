@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int UPDATE_WORD_ACTIVITY_REQUEST_CODE = 2;
     public static final String EXTRA_DATA_UPDATE_TITULO = "extra_data_update_titulo";
     public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
+    public static final String EXTRA_DATA_UPDATE_FECHA = "extra_data_update_fecha";
+    public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
             String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
-            Tarea tarea = new Tarea(titulo,  descripcion);
+            String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
+            Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO);
+            Tarea tarea = new Tarea(titulo,  descripcion, fecha, finalizado);
 
             //Guarda los datos
             mTareaViewModel.insert(tarea);

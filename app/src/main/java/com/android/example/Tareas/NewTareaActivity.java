@@ -31,6 +31,8 @@ import com.android.example.Tareas.R;
 import java.util.Calendar;
 
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
 
 /**
@@ -43,10 +45,12 @@ public class NewTareaActivity extends AppCompatActivity {
 
     public static final String EXTRA_TITULO = "EXTRA_TITULO";
     public static final String EXTRA_DESCRIPCION = "EXTRA_DESCRIPCION";
+    public static final String EXTRA_FECHA = "EXTRA_FECHA";
+    public static final String EXTRA_FINALIZADO = "EXTRA_FINALIZADO";
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
-    private TextView mFecha;
+    private TextView mEditFechaView;
     private CheckBox mFinalizado;
 
     @Override
@@ -56,7 +60,7 @@ public class NewTareaActivity extends AppCompatActivity {
 
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
-        mFecha = findViewById(R.id.fecha_creacion);
+        mEditFechaView = findViewById(R.id.fecha_creacion);
         mFinalizado = findViewById(R.id.finalizada);
 
         //creamos la fecha actual y la introducimos
@@ -66,7 +70,7 @@ public class NewTareaActivity extends AppCompatActivity {
         mes = mes + 1;
         int dia = c.get(Calendar.DAY_OF_MONTH);
         String fechacompleta = (dia+ " / " +mes+ " / " +anio);
-        mFecha.setText(fechacompleta);
+        mEditFechaView.setText(fechacompleta);
 
 
 
@@ -82,15 +86,24 @@ public class NewTareaActivity extends AppCompatActivity {
                 mEditTituloView.setSelection(titulo.length());
                 mEditTituloView.requestFocus();
                 mFinalizado.setVisibility(View.VISIBLE);
+
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
             if (!descripcion.isEmpty()) {
                 mEditDescripcionView.setText(descripcion);
                 mEditDescripcionView.setSelection(descripcion.length());
                 mEditDescripcionView.requestFocus();
-                mFinalizado.setVisibility(View.VISIBLE);
             }
-
+            String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
+            if (!fecha.isEmpty()) {
+                mEditFechaView.setText(fecha);
+                mEditFechaView.requestFocus();
+            }
+            Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
+            if (finalizado = true) {
+                mFinalizado.isChecked();
+                mFinalizado.requestFocus();
+            }
         }
 
 
@@ -108,9 +121,14 @@ public class NewTareaActivity extends AppCompatActivity {
                     // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
+                    String fecha = mEditFechaView.getText().toString();
+                    Boolean finalizado = false;
+                    if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
                     replyIntent.putExtra(EXTRA_TITULO, titulo);
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
+                    replyIntent.putExtra(EXTRA_FECHA, fecha);
+                    replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
                     // Establece el estado del resultado para indicar éxito.
                     setResult(RESULT_OK, replyIntent);
                 }

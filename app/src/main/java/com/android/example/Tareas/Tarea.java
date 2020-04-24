@@ -33,10 +33,18 @@ public class Tarea {
     @ColumnInfo(name = "descripcion")
     private String descripcion;
 
+    @ColumnInfo(name = "fecha")
+    private String fecha;
 
-    public Tarea(@NonNull String titulo, String descripcion) {
+    @ColumnInfo(name = "finalizado")
+    private Boolean finalizado;
+
+
+    public Tarea(@NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.finalizado = finalizado;
     }
 
 
@@ -45,8 +53,16 @@ public class Tarea {
         return this.titulo;
     }
     public String getDescripcion(){return this.descripcion;}
+    public String getFecha(){
+        return this.titulo;
+    }
+    public Boolean getFinalizado(){
+        return this.finalizado;
+    }
 
     public void setTitulo() { this.titulo = titulo; }
     public void setDescripcion() { this.descripcion = descripcion; }
+    public void setFecha() { this.fecha = fecha; }
+    public void setFinalizado() { this.finalizado = finalizado; }
 }
 
