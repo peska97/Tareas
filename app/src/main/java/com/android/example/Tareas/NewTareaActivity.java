@@ -63,7 +63,17 @@ public class NewTareaActivity extends AppCompatActivity {
         mTextFechaView = findViewById(R.id.fecha_creacion);
         mFinalizado = findViewById(R.id.finalizada);
 
-
+        //creamos la fecha actual
+        final Calendar c = Calendar.getInstance();
+        int anio = c.get(Calendar.YEAR);
+        int mes = c.get(Calendar.MONTH);
+        mes = mes + 1;
+        int dia = c.get(Calendar.DAY_OF_MONTH);
+        String fechacompleta = (dia+ " / " +mes+ " / " +anio);
+        //introducimos la fecha actual
+        if (mTextFechaView.isEnabled()){
+            mTextFechaView.setText(fechacompleta);
+        }
 
         //cuando accedas a la clase por medio de click en item
         final Bundle extras = getIntent().getExtras();
@@ -74,7 +84,6 @@ public class NewTareaActivity extends AppCompatActivity {
                 mEditTituloView.setSelection(titulo.length());
                 mEditTituloView.requestFocus();
                 mFinalizado.setVisibility(View.VISIBLE);
-
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
             if (!descripcion.isEmpty()) {
@@ -85,12 +94,11 @@ public class NewTareaActivity extends AppCompatActivity {
             String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
             if (!fecha.isEmpty()) {
                 mTextFechaView.setText(fecha);
-                mTextFechaView.setSelection(fecha.length());
                 mTextFechaView.requestFocus();
             }
             Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
             if (finalizado = true) {
-                mFinalizado.isChecked();
+                mFinalizado.setChecked(true);
                 mFinalizado.requestFocus();
             }
         }
@@ -110,16 +118,7 @@ public class NewTareaActivity extends AppCompatActivity {
                     // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
-
-                    //creamos la fecha actual y la introducimos
-                    final Calendar c = Calendar.getInstance();
-                    int anio = c.get(Calendar.YEAR);
-                    int mes = c.get(Calendar.MONTH);
-                    mes = mes + 1;
-                    int dia = c.get(Calendar.DAY_OF_MONTH);
-                    String fechacompleta = (dia+ " / " +mes+ " / " +anio);
-
-                    String fecha = fechacompleta;
+                    String fecha = mFinalizado.getText().toString();
                     Boolean finalizado = false;
                     if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
