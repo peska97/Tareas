@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
             String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
             String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
-            Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO);
+            Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO,false);
             Tarea tarea = new Tarea(titulo,  descripcion, fecha, finalizado);
 
             //Guarda los datos

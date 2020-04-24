@@ -50,7 +50,7 @@ public class NewTareaActivity extends AppCompatActivity {
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
-    private TextView mEditFechaView;
+    private TextView mTextFechaView;
     private CheckBox mFinalizado;
 
     @Override
@@ -60,20 +60,8 @@ public class NewTareaActivity extends AppCompatActivity {
 
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
-        mEditFechaView = findViewById(R.id.fecha_creacion);
+        mTextFechaView = findViewById(R.id.fecha_creacion);
         mFinalizado = findViewById(R.id.finalizada);
-
-        //creamos la fecha actual y la introducimos
-        final Calendar c = Calendar.getInstance();
-        int anio = c.get(Calendar.YEAR);
-        int mes = c.get(Calendar.MONTH);
-        mes = mes + 1;
-        int dia = c.get(Calendar.DAY_OF_MONTH);
-        String fechacompleta = (dia+ " / " +mes+ " / " +anio);
-        mEditFechaView.setText(fechacompleta);
-
-
-
 
 
 
@@ -96,8 +84,9 @@ public class NewTareaActivity extends AppCompatActivity {
             }
             String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
             if (!fecha.isEmpty()) {
-                mEditFechaView.setText(fecha);
-                mEditFechaView.requestFocus();
+                mTextFechaView.setText(fecha);
+                mTextFechaView.setSelection(fecha.length());
+                mTextFechaView.requestFocus();
             }
             Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
             if (finalizado = true) {
@@ -121,7 +110,16 @@ public class NewTareaActivity extends AppCompatActivity {
                     // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
-                    String fecha = mEditFechaView.getText().toString();
+
+                    //creamos la fecha actual y la introducimos
+                    final Calendar c = Calendar.getInstance();
+                    int anio = c.get(Calendar.YEAR);
+                    int mes = c.get(Calendar.MONTH);
+                    mes = mes + 1;
+                    int dia = c.get(Calendar.DAY_OF_MONTH);
+                    String fechacompleta = (dia+ " / " +mes+ " / " +anio);
+
+                    String fecha = fechacompleta;
                     Boolean finalizado = false;
                     if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
