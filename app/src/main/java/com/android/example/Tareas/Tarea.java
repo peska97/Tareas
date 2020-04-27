@@ -42,6 +42,13 @@ public class Tarea {
     private Boolean finalizado;
 
 
+    public Tarea(@NonNull String titulo, String descripcion, String fecha, Boolean finalizado){
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.finalizado = finalizado;
+    }
+
     @Ignore
     public Tarea(int id, @NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
         this.id = id;

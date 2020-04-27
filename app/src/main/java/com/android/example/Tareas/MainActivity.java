@@ -164,12 +164,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Tarea titulo = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_TITULO));
-            Tarea descripcion = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION));
-            Tarea fecha = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_FECHA));
-            Tarea finalizado = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_FINALIZADO));
+            Tarea tarea = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_TITULO),data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION),data.getStringExtra(NewTareaActivity.EXTRA_FECHA),data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO));
             //Guarda los datos
-            mTareaViewModel.insert(titulo, descripcion, fecha, finalizado);
+            mTareaViewModel.insert(tarea);
          } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
                 String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
                 String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);

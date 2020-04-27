@@ -60,4 +60,6 @@ public class TareaViewModel extends AndroidViewModel {
     public void deleteTarea(Tarea tarea) {
         mRepository.deleteTarea(tarea);
     }
+
+    public  void update(Tarea tarea) {mRepository.update(tarea);}
 }
