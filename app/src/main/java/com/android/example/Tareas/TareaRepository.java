@@ -64,6 +64,8 @@ public class TareaRepository {
         new deleteAllTareasAsyncTask(mTareaDao).execute();
     }
 
+    public void update(Tarea tarea) {new updateTareasAsyncTask(mTareaDao).execute(tarea);}
+
     // Need to run off main thread
     public void deleteTarea(Tarea tarea) {
         new deleteTareaAsyncTask(mTareaDao).execute(tarea);
@@ -114,6 +116,19 @@ public class TareaRepository {
         @Override
         protected Void doInBackground(final Tarea... params) {
             mAsyncTaskDao.deleteTarea(params[0]);
+            return null;
+        }
+    }
+
+    //Actualizar tareas en la BBDD
+    private static class updateTareasAsyncTask extends AsyncTask<Tarea, Void, Void> {
+        private TareaDao mAsyncTaskDao;
+
+        updateTareasAsyncTask(TareaDao dao) { mAsyncTaskDao = dao;}
+
+        @Override
+        protected Void doInBackground(final Tarea... params) {
+            mAsyncTaskDao.update(params[0], params[0], params[0], params[0]);
             return null;
         }
     }
