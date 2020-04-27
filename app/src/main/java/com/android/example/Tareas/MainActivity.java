@@ -48,14 +48,15 @@ public class MainActivity extends AppCompatActivity {
     //var para todas las interacciones de la actividad
     private TareaViewModel mTareaViewModel;
 
-    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_TAREA_ACTIVITY_REQUEST_CODE = 1;
 
     //click en item
-    public static final int UPDATE_WORD_ACTIVITY_REQUEST_CODE = 2;
+    public static final int UPDATE_TAREA_ACTIVITY_REQUEST_CODE = 2;
     public static final String EXTRA_DATA_UPDATE_TITULO = "extra_data_update_titulo";
     public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
     public static final String EXTRA_DATA_UPDATE_FECHA = "extra_data_update_fecha";
     public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
+    public static final String EXTRA_DATA_ID = "extra_data_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //al dar clic en FAB llama a la clase para crear otra palabra
                 Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
-                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -162,26 +163,40 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
-            String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
-            String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
-            Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO,false);
-            Tarea tarea = new Tarea(titulo,  descripcion, fecha, finalizado);
-
+        if (requestCode == NEW_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Tarea titulo = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_TITULO));
+            Tarea descripcion = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION));
+            Tarea fecha = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_FECHA));
+            Tarea finalizado = new Tarea(data.getStringExtra(NewTareaActivity.EXTRA_FINALIZADO));
             //Guarda los datos
-            mTareaViewModel.insert(tarea);
-        } else {
-            Toast.makeText(
-                    this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
-        }
+            mTareaViewModel.insert(titulo, descripcion, fecha, finalizado);
+         } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
+                String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
+                String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
+                Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
+                int id = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
+                if (id != -1) {
+                    mTareaViewModel.update(new Tarea(id, titulo, descripcion, fecha, finalizado));
+                } else {
+                    Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
+                }
+
+            } else {
+                Toast.makeText(
+                        this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
+            }
+
     }
 
     //click en item
     public void clickenitem( Tarea tarea) {
         Intent intent = new Intent(this, NewTareaActivity.class);
+        intent.putExtra(EXTRA_DATA_ID, tarea.getId());
         intent.putExtra(EXTRA_DATA_UPDATE_TITULO, tarea.getTitulo());
         intent.putExtra(EXTRA_DATA_UPDATE_DESCRIPCION, tarea.getDescripcion());
-        startActivityForResult(intent, UPDATE_WORD_ACTIVITY_REQUEST_CODE);
+        intent.putExtra(EXTRA_DATA_UPDATE_FECHA, tarea.getFecha());
+        intent.putExtra(EXTRA_DATA_UPDATE_FINALIZADO, tarea.getFinalizado());
+        startActivityForResult(intent, UPDATE_TAREA_ACTIVITY_REQUEST_CODE);
     }
 }

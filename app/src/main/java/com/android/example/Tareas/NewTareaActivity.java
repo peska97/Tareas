@@ -30,6 +30,7 @@ import com.android.example.Tareas.R;
 
 import java.util.Calendar;
 
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
@@ -43,10 +44,11 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
  */
 public class NewTareaActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TITULO = "EXTRA_TITULO";
-    public static final String EXTRA_DESCRIPCION = "EXTRA_DESCRIPCION";
-    public static final String EXTRA_FECHA = "EXTRA_FECHA";
-    public static final String EXTRA_FINALIZADO = "EXTRA_FINALIZADO";
+    public static final String EXTRA_ID = "com.android.example.roomwordssample.ID";
+    public static final String EXTRA_TITULO = "com.example.android.roomwordssample.TITULO";
+    public static final String EXTRA_DESCRIPCION = "com.android.example.roomwordssample.DESCRIPCION";
+    public static final String EXTRA_FECHA = "com.android.example.roomwordssample.FECHA";
+    public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
@@ -126,6 +128,12 @@ public class NewTareaActivity extends AppCompatActivity {
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
                     replyIntent.putExtra(EXTRA_FECHA, fecha);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
+                    if (extras !=null && extras.containsKey(EXTRA_DATA_ID)) {
+                        int id = extras.getInt(EXTRA_DATA_ID, -1);
+                        if (id !=-1) {
+                            replyIntent.putExtra(EXTRA_ID, id);
+                        }
+                    }
                     // Establece el estado del resultado para indicar éxito.
                     setResult(RESULT_OK, replyIntent);
                 }

@@ -31,7 +31,8 @@ import android.support.annotation.NonNull;
  */
 
 //entidad para la BBDD
-@Database(entities = {Tarea.class}, version = 1, exportSchema = false)
+    //version 2 para actualizar tareas
+@Database(entities = {Tarea.class}, version = 2, exportSchema = false)
 public abstract class TareaRoomDatabase extends RoomDatabase {
 
     //Definimos la DAO de la BBDD
@@ -81,6 +82,8 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
 
         private static String [] descripciones = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
                 "Hacer la colada", "Fregar los platos"};
+        private static String fecha = "1/1/1";
+        private static Boolean finalizado = false;
 
         PopulateDbAsync(TareaRoomDatabase db) {
             mDao = db.TareaDao();
@@ -89,10 +92,9 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
             //aqui se comprueba que la BBDD esta vacia
-            String fecha = "1/1/1";
             if (mDao.getAnyTarea().length < 1) {
                 for (int i = 0; i <= titulos.length - 1; i++) {
-                    Tarea tarea = new Tarea(titulos[i], descripciones[i], fecha, false);
+                    Tarea tarea = new Tarea(titulos[i], descripciones[i], fecha, finalizado));
                     mDao.insert(tarea);
                 }
             }

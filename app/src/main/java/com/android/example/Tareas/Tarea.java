@@ -18,6 +18,7 @@ package com.android.example.Tareas;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -25,7 +26,8 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "tarea_table")
 public class Tarea {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @NonNull
     @ColumnInfo(name = "titulo")
     private String titulo;
@@ -40,7 +42,9 @@ public class Tarea {
     private Boolean finalizado;
 
 
-    public Tarea(@NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
+    @Ignore
+    public Tarea(int id, @NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
+        this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -49,6 +53,7 @@ public class Tarea {
 
 
 
+    public  int getId() {return id;}
     public String getTitulo(){
         return this.titulo;
     }
@@ -60,6 +65,7 @@ public class Tarea {
         return this.finalizado;
     }
 
+    public void setId() {this.id = id;}
     public void setTitulo() { this.titulo = titulo; }
     public void setDescripcion() { this.descripcion = descripcion; }
     public void setFecha() { this.fecha = fecha; }
