@@ -28,6 +28,7 @@ public class Tarea {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @NonNull
     @ColumnInfo(name = "titulo")
     private String titulo;
@@ -60,7 +61,7 @@ public class Tarea {
 
 
 
-    public  int getId() {return id;}
+    public  int getId() {return this.id;}
     public String getTitulo(){
         return this.titulo;
     }
