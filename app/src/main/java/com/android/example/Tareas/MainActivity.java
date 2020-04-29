@@ -34,16 +34,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * This class displays a list of words in a RecyclerView.
- * The words are saved in a Room database.
- * The layout for this activity also displays an FAB that
- * allows users to start the NewTareaActivity to add new words.
- * Users can delete a word by swiping it away, or delete all words
- * through the Options menu.
- * Whenever a new word is added, deleted, or updated, the RecyclerView
- * showing the list of words automatically updates.
- */
 public class MainActivity extends AppCompatActivity {
     //var para todas las interacciones de la actividad
     private TareaViewModel mTareaViewModel;

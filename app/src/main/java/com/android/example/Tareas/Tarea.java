@@ -67,7 +67,7 @@ public class Tarea {
     }
     public String getDescripcion(){return this.descripcion;}
     public String getFecha(){
-        return this.titulo;
+        return this.fecha;
     }
     public Boolean getFinalizado(){
         return this.finalizado;

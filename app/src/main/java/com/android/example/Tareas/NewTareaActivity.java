@@ -36,12 +36,6 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
 
-/**
- * This class displays a screen where the user enters a new word.
- * The NewTareaActivity returns the entered word to the calling activity
- * (MainActivity) which then stores the new word and updates the list of
- * displayed words.
- */
 public class NewTareaActivity extends AppCompatActivity {
 
     public static final String EXTRA_ID = "com.android.example.roomwordssample.ID";
@@ -83,25 +77,19 @@ public class NewTareaActivity extends AppCompatActivity {
             String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
             if (!titulo.isEmpty()) {
                 mEditTituloView.setText(titulo);
-                mEditTituloView.setSelection(titulo.length());
-                mEditTituloView.requestFocus();
+                mFinalizado.setVisibility(View.VISIBLE);
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
             if (!descripcion.isEmpty()) {
                 mEditDescripcionView.setText(descripcion);
-                mEditDescripcionView.setSelection(descripcion.length());
-                mEditDescripcionView.requestFocus();
             }
             String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
             if (!fecha.isEmpty()) {
                 mTextFechaView.setText(fecha);
-                mTextFechaView.requestFocus();
             }
             Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
-            if (finalizado = true) {
+            if (finalizado == true) {
                 mFinalizado.setChecked(true);
-                mFinalizado.requestFocus();
-                mFinalizado.setVisibility(View.VISIBLE);
             }
         }
 

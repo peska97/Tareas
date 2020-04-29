@@ -60,17 +60,12 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
         }
     }
 
-    /**
-     *     Associate a list of tareas with this adapter
-    */
 
     void setWords(List<Tarea> tareas) {
         Tareas = tareas;
         notifyDataSetChanged();
     }
 
-    // getItemCount() is called many times, and when it is first called,
-    // mTareas has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
         if (Tareas != null)
@@ -78,14 +73,6 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
         else return 0;
     }
 
-    /**
-     * Get the word at a given position.
-     * This method is useful for identifying which word
-     * was clicked or swiped in methods that handle user events.
-     *
-     * @param position
-     * @return The word at the given position
-     */
     public Tarea getTareaAtPosition(int position) {
         return Tareas.get(position);
     }

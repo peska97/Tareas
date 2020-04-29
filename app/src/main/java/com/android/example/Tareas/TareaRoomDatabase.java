@@ -24,12 +24,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-/**
- * TareaRoomDatabase. Includes code to create the database.
- * After the app creates the database, all further interactions
- * with it happen through the TareaViewModel.
- */
-
 //entidad para la BBDD
     //version 2 para actualizar tareas
 @Database(entities = {Tarea.class}, version = 2, exportSchema = false)
