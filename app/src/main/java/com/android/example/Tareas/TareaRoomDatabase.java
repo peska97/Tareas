@@ -80,8 +80,8 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         private static String [] titulos = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
                 "Hacer la colada", "Fregar los platos"};
 
-        private static String [] descripciones = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
-                "Hacer la colada", "Fregar los platos"};
+        private static String [] descripciones = {"Ir a la compra d", "Limpiar d", "Ordenar habitacion d", "Estudiar d", "Planchar d",
+                "Hacer la colada d", "Fregar los platos d"};
         private static String fecha = "1/1/1";
         private static Boolean finalizado = false;
 

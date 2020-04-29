@@ -85,7 +85,6 @@ public class NewTareaActivity extends AppCompatActivity {
                 mEditTituloView.setText(titulo);
                 mEditTituloView.setSelection(titulo.length());
                 mEditTituloView.requestFocus();
-                mFinalizado.setVisibility(View.VISIBLE);
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
             if (!descripcion.isEmpty()) {
@@ -102,6 +101,7 @@ public class NewTareaActivity extends AppCompatActivity {
             if (finalizado = true) {
                 mFinalizado.setChecked(true);
                 mFinalizado.requestFocus();
+                mFinalizado.setVisibility(View.VISIBLE);
             }
         }
 
@@ -120,7 +120,7 @@ public class NewTareaActivity extends AppCompatActivity {
                     // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
-                    String fecha = mFinalizado.getText().toString();
+                    String fecha = mTextFechaView.getText().toString();
                     Boolean finalizado = false;
                     if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
@@ -129,9 +129,9 @@ public class NewTareaActivity extends AppCompatActivity {
                     replyIntent.putExtra(EXTRA_FECHA, fecha);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
                     if (extras !=null && extras.containsKey(EXTRA_DATA_ID)) {
-                        int id = extras.getInt(EXTRA_DATA_ID, -1);
-                        if (id !=-1) {
-                            replyIntent.putExtra(EXTRA_ID, id);
+                        int identificador = extras.getInt(EXTRA_DATA_ID, -1);
+                        if (identificador !=-1) {
+                            replyIntent.putExtra(EXTRA_ID, identificador);
                         }
                     }
                     // Establece el estado del resultado para indicar éxito.

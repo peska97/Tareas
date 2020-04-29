@@ -27,7 +27,7 @@ import android.support.annotation.NonNull;
 public class Tarea {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int identificador;
 
     @NonNull
     @ColumnInfo(name = "titulo")
@@ -51,8 +51,8 @@ public class Tarea {
     }
 
     @Ignore
-    public Tarea(int id, @NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
-        this.id = id;
+    public Tarea(int identificador, @NonNull String titulo, String descripcion, String fecha, Boolean finalizado) {
+        this.identificador = identificador;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -61,7 +61,7 @@ public class Tarea {
 
 
 
-    public  int getId() {return this.id;}
+    public  int getIdentificador() {return this.identificador;}
     public String getTitulo(){
         return this.titulo;
     }
@@ -73,7 +73,7 @@ public class Tarea {
         return this.finalizado;
     }
 
-    public void setId() {this.id = id;}
+    public void setIdentificador(int identificador) {this.identificador = identificador;}
     public void setTitulo() { this.titulo = titulo; }
     public void setDescripcion() { this.descripcion = descripcion; }
     public void setFecha() { this.fecha = fecha; }

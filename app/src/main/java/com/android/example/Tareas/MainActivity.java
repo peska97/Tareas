@@ -176,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
                 String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
                 String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
                 Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
-                int id = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
-                if (id != -1) {
-                    mTareaViewModel.update(new Tarea(id, titulo, descripcion, fecha, finalizado));
+                int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
+                if (identificador != -1) {
+                    mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, finalizado));
                 } else {
                     Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
                 }
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     //click en item
     public void clickenitem( Tarea tarea) {
         Intent intent = new Intent(this, NewTareaActivity.class);
-        intent.putExtra(EXTRA_DATA_ID, tarea.getId());
+        intent.putExtra(EXTRA_DATA_ID, tarea.getIdentificador());
         intent.putExtra(EXTRA_DATA_UPDATE_TITULO, tarea.getTitulo());
         intent.putExtra(EXTRA_DATA_UPDATE_DESCRIPCION, tarea.getDescripcion());
         intent.putExtra(EXTRA_DATA_UPDATE_FECHA, tarea.getFecha());
