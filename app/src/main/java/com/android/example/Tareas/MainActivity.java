@@ -174,8 +174,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             } else {
+            //Toast y vuelve a abrir la segunda actividad
                 Toast.makeText(
                         this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
+            startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
+
             }
 
     }

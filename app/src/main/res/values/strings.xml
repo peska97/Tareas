@@ -17,7 +17,7 @@ limitations under the License. -->
     <string name="action_settings">Settings</string>
 
     <string name="button_save">Guardar</string>
-    <string name="empty_not_saved">Tarea no guardada porque está vacía.</string>
+    <string name="empty_not_saved">Introduce una Tarea para guardarla</string>
     <string name="clear_all_data">Borrar todo</string>
     <string name="delete_word_preamble">Borrando </string>
     <string name="clear_data_toast_text">Borrar los datos ahora!</string>
@@ -26,4 +26,5 @@ limitations under the License. -->
     <string name="hint_descripcion">Descripción</string>
     <string name="text_finalizada">Finalizada</string>
     <string name="fecha_actual">Fecha actual</string>
+    <string name="tarea_vacia">Introduzca una tarea</string>
 </resources>
