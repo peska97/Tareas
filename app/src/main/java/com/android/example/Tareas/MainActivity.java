@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
     public static final String EXTRA_DATA_UPDATE_FECHA = "extra_data_update_fecha";
     public static final String EXTRA_DATA_UPDATE_FECHAFIN = "extra_data_update_fechafin";
+    public static final String EXTRA_DATA_UPDATE_HORAFIN = "extra_data_update_horafin";
     public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
     public static final String EXTRA_DATA_ID = "extra_data_id";
     //variable prara ordenar la lista
@@ -191,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                     data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION),
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHA),
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN),
+                    data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN),
                     data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO,false));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
@@ -199,10 +201,11 @@ public class MainActivity extends AppCompatActivity {
                 String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
                 String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
                 String fechafin = data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN);
+                String horafin = data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN);
                 Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
                 int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
                 if (identificador != -1) {
-                    mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, finalizado));
+                    mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado));
                 } else {
                     Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
                 }
@@ -226,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATA_UPDATE_DESCRIPCION, tarea.getDescripcion());
         intent.putExtra(EXTRA_DATA_UPDATE_FECHA, tarea.getFecha());
         intent.putExtra(EXTRA_DATA_UPDATE_FECHAFIN, tarea.getFechafin());
+        intent.putExtra(EXTRA_DATA_UPDATE_HORAFIN, tarea.getHorafin());
         intent.putExtra(EXTRA_DATA_UPDATE_FINALIZADO, tarea.getFinalizado());
         startActivityForResult(intent, UPDATE_TAREA_ACTIVITY_REQUEST_CODE);
     }

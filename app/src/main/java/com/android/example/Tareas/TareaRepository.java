@@ -119,7 +119,7 @@ public class TareaRepository {
 
         @Override
         protected Void doInBackground(final Tarea... params) {
-            mAsyncTaskDao.update(params[0], params[0], params[0], params[0], params[0]);
+            mAsyncTaskDao.update(params[0], params[0], params[0], params[0], params[0], params[0]);
             return null;
         }
     }

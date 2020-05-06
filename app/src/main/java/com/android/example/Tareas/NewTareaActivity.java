@@ -16,6 +16,8 @@
 
 package com.android.example.Tareas;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,8 +25,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.example.Tareas.R;
@@ -35,23 +39,30 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
 
-public class NewTareaActivity extends AppCompatActivity {
+public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String EXTRA_ID = "com.android.example.roomwordssample.ID";
     public static final String EXTRA_TITULO = "com.example.android.roomwordssample.TITULO";
     public static final String EXTRA_DESCRIPCION = "com.android.example.roomwordssample.DESCRIPCION";
     public static final String EXTRA_FECHA = "com.android.example.roomwordssample.FECHA";
     public static final String EXTRA_FECHAFIN = "com.android.example.roomwordssample.FECHAFIN";
+    public static final String EXTRA_HORAFIN = "com.android.example.roomwordssample.HORAFIN";
     public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
+
+    private int diafin, mesfin, aniofin, horafin, minutosfin;
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
     private TextView mTextFechaView;
     private EditText mTextFechafinView;
+    private EditText mTextHorafinView;
     private CheckBox mFinalizado;
+    private Button mButtonFechafin;
+    private Button mButtonHorafin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,20 +73,24 @@ public class NewTareaActivity extends AppCompatActivity {
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
         mTextFechaView = findViewById(R.id.fecha_creacion);
         mTextFechafinView = findViewById(R.id.fecha_fin);
+        mTextHorafinView = findViewById(R.id.hora_fin);
         mFinalizado = findViewById(R.id.finalizada);
+        mButtonFechafin = findViewById(R.id.button_fecha);
+        mButtonHorafin = findViewById(R.id.button_hora);
+        mButtonFechafin.setOnClickListener(this);
+        mButtonHorafin.setOnClickListener(this);
 
         //creamos la fecha actual
         final Calendar c = Calendar.getInstance();
         int anio = c.get(Calendar.YEAR);
         int mes = c.get(Calendar.MONTH);
-        mes = mes + 1;
+        int mescorrecto = mes + 1;
         int dia = c.get(Calendar.DAY_OF_MONTH);
-        String fechacompleta = (dia+ " / " +mes+ " / " +anio);
+        String fechacompleta = (dia+ " / " +mescorrecto+ " / " +anio);
         //introducimos la fecha actual
         if (mTextFechaView.isEnabled()){
             mTextFechaView.setText(fechacompleta);
         }
-        mTextFechafinView.setText("9/9/8");
 
         //cuando accedas a la clase por medio de click en item
         final Bundle extras = getIntent().getExtras();
@@ -94,8 +109,12 @@ public class NewTareaActivity extends AppCompatActivity {
                 mTextFechaView.setText(fecha);
             }
             String fechafin = extras.getString(EXTRA_DATA_UPDATE_FECHAFIN, "");
-            if (!fecha.isEmpty()) {
+            if (!fechafin.isEmpty()) {
                 mTextFechafinView.setText(fechafin);
+            }
+            String horafin = extras.getString(EXTRA_DATA_UPDATE_HORAFIN, "");
+            if (!horafin.isEmpty()) {
+                mTextHorafinView.setText(horafin);
             }
             Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
             if (finalizado == true) {
@@ -120,6 +139,7 @@ public class NewTareaActivity extends AppCompatActivity {
                     String descripcion = mEditDescripcionView.getText().toString();
                     String fecha = mTextFechaView.getText().toString();
                     String fechafin = mTextFechafinView.getText().toString();
+                    String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
                     if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
@@ -127,6 +147,7 @@ public class NewTareaActivity extends AppCompatActivity {
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
                     replyIntent.putExtra(EXTRA_FECHA, fecha);
                     replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
+                    replyIntent.putExtra(EXTRA_HORAFIN, horafin);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
                     if (extras !=null && extras.containsKey(EXTRA_DATA_ID)) {
                         int identificador = extras.getInt(EXTRA_DATA_ID, -1);
@@ -140,5 +161,39 @@ public class NewTareaActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    //para introducir las fechas en la parte visual, dandole a los botones
+    @Override
+    public void onClick(View v) {
+        if (v==mButtonFechafin) {
+            final Calendar cf = Calendar.getInstance();
+            diafin = cf.get(Calendar.DAY_OF_MONTH);
+            mesfin = cf.get(Calendar.MONTH);
+            aniofin = cf.get(Calendar.YEAR);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    mTextFechafinView.setText(dayOfMonth+"/"+(month+1)+"/" + year);
+                }
+            }
+            ,diafin,mesfin,aniofin);
+            datePickerDialog.show();;
+        }
+        if (v==mButtonHorafin) {
+            final Calendar cf = Calendar.getInstance();
+            horafin = cf.get(Calendar.HOUR_OF_DAY);
+            minutosfin = cf.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    mTextHorafinView.setText(hourOfDay+":"+minute);
+                }
+            },horafin,minutosfin,false);
+            timePickerDialog.show();
+
+        }
     }
 }

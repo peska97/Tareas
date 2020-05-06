@@ -33,4 +33,7 @@ limitations under the License. -->
     <string name="ordenar_fecha">Ordenados por fecha</string>
     <string name="fecha_finalizacion">Fecha de finalización</string>
     <string name="hint_fechafin">Fecha finalización</string>
+    <string name="hint_horafin">Hora finalización</string>
+    <string name="button_hora">Hora</string>
+    <string name="button_fecha">Fecha</string>
 </resources>

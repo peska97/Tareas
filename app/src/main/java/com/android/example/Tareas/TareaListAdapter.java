@@ -25,11 +25,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * This is the adapter for the RecyclerView that displays
- * a list of words.
- */
-
 //adaptador
 public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.TareaViewHolder> {
 
