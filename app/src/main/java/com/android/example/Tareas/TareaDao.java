@@ -54,7 +54,7 @@ public interface TareaDao {
     LiveData<List<Tarea>> getAllTareas();
 
     //metodo para ordenar por fecha
-    @Query("SELECT * from tarea_table ORDER BY fecha ASC")
+    @Query("SELECT * from tarea_table ORDER BY fechafin ASC")
     LiveData<List<Tarea>> getAllfechasTareas();
 
     //metodo para actualizar tareas
