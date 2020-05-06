@@ -34,6 +34,7 @@ import java.util.Calendar;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
 
@@ -43,11 +44,13 @@ public class NewTareaActivity extends AppCompatActivity {
     public static final String EXTRA_TITULO = "com.example.android.roomwordssample.TITULO";
     public static final String EXTRA_DESCRIPCION = "com.android.example.roomwordssample.DESCRIPCION";
     public static final String EXTRA_FECHA = "com.android.example.roomwordssample.FECHA";
+    public static final String EXTRA_FECHAFIN = "com.android.example.roomwordssample.FECHAFIN";
     public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
     private TextView mTextFechaView;
+    private EditText mTextFechafinView;
     private CheckBox mFinalizado;
 
     @Override
@@ -58,6 +61,7 @@ public class NewTareaActivity extends AppCompatActivity {
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
         mTextFechaView = findViewById(R.id.fecha_creacion);
+        mTextFechafinView = findViewById(R.id.fecha_fin);
         mFinalizado = findViewById(R.id.finalizada);
 
         //creamos la fecha actual
@@ -71,6 +75,7 @@ public class NewTareaActivity extends AppCompatActivity {
         if (mTextFechaView.isEnabled()){
             mTextFechaView.setText(fechacompleta);
         }
+        mTextFechafinView.setText("9/9/8");
 
         //cuando accedas a la clase por medio de click en item
         final Bundle extras = getIntent().getExtras();
@@ -87,6 +92,10 @@ public class NewTareaActivity extends AppCompatActivity {
             String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
             if (!fecha.isEmpty()) {
                 mTextFechaView.setText(fecha);
+            }
+            String fechafin = extras.getString(EXTRA_DATA_UPDATE_FECHAFIN, "");
+            if (!fecha.isEmpty()) {
+                mTextFechafinView.setText(fechafin);
             }
             Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
             if (finalizado == true) {
@@ -110,12 +119,14 @@ public class NewTareaActivity extends AppCompatActivity {
                     String titulo = mEditTituloView.getText().toString();
                     String descripcion = mEditDescripcionView.getText().toString();
                     String fecha = mTextFechaView.getText().toString();
+                    String fechafin = mTextFechafinView.getText().toString();
                     Boolean finalizado = false;
                     if (mFinalizado.isChecked()){ finalizado = true; };
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
                     replyIntent.putExtra(EXTRA_TITULO, titulo);
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
                     replyIntent.putExtra(EXTRA_FECHA, fecha);
+                    replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
                     if (extras !=null && extras.containsKey(EXTRA_DATA_ID)) {
                         int identificador = extras.getInt(EXTRA_DATA_ID, -1);

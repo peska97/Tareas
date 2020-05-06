@@ -16,17 +16,22 @@ public class TareaViewModel extends AndroidViewModel {
 
     //var almacena el cache la lista de tareas
     private LiveData<List<Tarea>> mAllTareas;
+    private LiveData<List<Tarea>> mAllfechasTareas;
 
     //constructor con las var anteriores
     public TareaViewModel(Application application) {
         super(application);
         mRepository = new TareaRepository(application);
         mAllTareas = mRepository.getAllTareas();
+        mAllfechasTareas = mRepository.getAllfechasTareas();
     }
 
     //metodo getter para obtener las palabras
     LiveData<List<Tarea>> getAllTareas() {
         return mAllTareas;
+    }
+    LiveData<List<Tarea>> getAllfechasTareas() {
+        return mAllfechasTareas;
     }
 
     //metodo insert contenedor, para que este oculta al usuario
@@ -43,4 +48,5 @@ public class TareaViewModel extends AndroidViewModel {
     }
 
     public  void update(Tarea tarea) {mRepository.update(tarea);}
+
 }

@@ -27,6 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_TITULO = "extra_data_update_titulo";
     public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
     public static final String EXTRA_DATA_UPDATE_FECHA = "extra_data_update_fecha";
+    public static final String EXTRA_DATA_UPDATE_FECHAFIN = "extra_data_update_fechafin";
     public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
     public static final String EXTRA_DATA_ID = "extra_data_id";
+    //variable prara ordenar la lista
+    private int mOrdenar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +68,27 @@ public class MainActivity extends AppCompatActivity {
         //lo utilizamos para que cuando se destruya la actividad, no se borre
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
 
-        //observador, que actualiza los cambios cuando se producen
-        //Obtiene todas las tareas de la BBDD y la asocia al adaptador
-        mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
-            @Override
-            public void onChanged(@Nullable final List<Tarea> tareas) {
-                //Actualiza las tareas en cache
-                adapter.setWords(tareas);
-            }
-        });
+
+        if (mOrdenar == 1) {
+            mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    adapter.setWords(tareas);
+                }
+            });
+
+        }
+        else {
+            //observador, que actualiza los cambios cuando se producen
+            //Obtiene todas las tareas de la BBDD y la asocia al adaptador
+            mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    //Actualiza las tareas en cache
+                    adapter.setWords(tareas);
+                }
+            });
+        }
 
         //Opciones del boton flotante
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -146,6 +162,22 @@ public class MainActivity extends AppCompatActivity {
             mTareaViewModel.deleteAll();
             return true;
         }
+        if (id == R.id.ordenar_alfabeticamente) {
+            //mensaje toast
+            Toast.makeText(this, R.string.ordenar_alfabeticamente, Toast.LENGTH_LONG).show();
+
+            //Cambiar valor de variable
+            mOrdenar = 0;
+            return true;
+        }
+        if (id == R.id.ordenar_fecha) {
+            //mensaje toast
+            Toast.makeText(this, R.string.ordenar_fecha, Toast.LENGTH_LONG).show();
+
+            //Cambiar valor de variable
+            mOrdenar = 1;
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -158,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     data.getStringExtra(NewTareaActivity.EXTRA_TITULO),
                     data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION),
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHA),
+                    data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN),
                     data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO,false));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
@@ -165,10 +198,11 @@ public class MainActivity extends AppCompatActivity {
                 String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
                 String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
                 String fecha = data.getStringExtra(NewTareaActivity.EXTRA_FECHA);
+                String fechafin = data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN);
                 Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
                 int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
                 if (identificador != -1) {
-                    mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, finalizado));
+                    mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, finalizado));
                 } else {
                     Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
                 }
@@ -177,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
             //Toast y vuelve a abrir la segunda actividad
                 Toast.makeText(
                         this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
-            startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
+            //Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
+            //startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
 
             }
 
@@ -191,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATA_UPDATE_TITULO, tarea.getTitulo());
         intent.putExtra(EXTRA_DATA_UPDATE_DESCRIPCION, tarea.getDescripcion());
         intent.putExtra(EXTRA_DATA_UPDATE_FECHA, tarea.getFecha());
+        intent.putExtra(EXTRA_DATA_UPDATE_FECHAFIN, tarea.getFechafin());
         intent.putExtra(EXTRA_DATA_UPDATE_FINALIZADO, tarea.getFinalizado());
         startActivityForResult(intent, UPDATE_TAREA_ACTIVITY_REQUEST_CODE);
     }

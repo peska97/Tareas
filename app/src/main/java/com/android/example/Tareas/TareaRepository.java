@@ -28,17 +28,22 @@ public class TareaRepository {
     private TareaDao mTareaDao;
     //lista de palabras
     private LiveData<List<Tarea>> mAllTareas;
+    private LiveData<List<Tarea>> mAllfechasTareas;
 
     //constructor, obtiene identificacion de BBDD e inicializa las variables
     TareaRepository(Application application) {
         TareaRoomDatabase db = TareaRoomDatabase.getDatabase(application);
         mTareaDao = db.TareaDao();
         mAllTareas = mTareaDao.getAllTareas();
+        mAllfechasTareas = mTareaDao.getAllfechasTareas();
     }
 
     //metodo contenedor, notifica cuando los datos cambian
     LiveData<List<Tarea>> getAllTareas() {
         return mAllTareas;
+    }
+    LiveData<List<Tarea>> getAllfechasTareas() {
+        return mAllfechasTareas;
     }
 
     //contenedor para insert, llama a un subproceso para que la aplicacion no se bloque
@@ -114,7 +119,7 @@ public class TareaRepository {
 
         @Override
         protected Void doInBackground(final Tarea... params) {
-            mAsyncTaskDao.update(params[0], params[0], params[0], params[0]);
+            mAsyncTaskDao.update(params[0], params[0], params[0], params[0], params[0]);
             return null;
         }
     }

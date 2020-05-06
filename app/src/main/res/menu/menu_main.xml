@@ -21,4 +21,16 @@ limitations under the License. -->
         android:orderInCategory="100"
         android:title="@string/clear_all_data"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ordenar_alfabeticamente"
+        android:orderInCategory="100"
+        android:title="@string/alfabetic_ordenar"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ordenar_fecha"
+        android:orderInCategory="100"
+        android:title="@string/fecha_ordenar"
+        app:showAsAction="never" />
 </menu>

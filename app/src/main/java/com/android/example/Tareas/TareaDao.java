@@ -53,6 +53,10 @@ public interface TareaDao {
     //utilizamos liveData para responder a los cambios de los datos
     LiveData<List<Tarea>> getAllTareas();
 
+    //metodo para ordenar por fecha
+    @Query("SELECT * from tarea_table ORDER BY fecha ASC")
+    LiveData<List<Tarea>> getAllfechasTareas();
+
     //metodo para actualizar tareas
     @Update
     void update(Tarea... tarea);

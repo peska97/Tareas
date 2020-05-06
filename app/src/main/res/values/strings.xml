@@ -17,7 +17,7 @@ limitations under the License. -->
     <string name="action_settings">Settings</string>
 
     <string name="button_save">Guardar</string>
-    <string name="empty_not_saved">Introduce una Tarea para guardarla</string>
+    <string name="empty_not_saved">Tarea No Guardada</string>
     <string name="clear_all_data">Borrar todo</string>
     <string name="delete_word_preamble">Borrando </string>
     <string name="clear_data_toast_text">Borrar los datos ahora!</string>
@@ -25,6 +25,12 @@ limitations under the License. -->
     <string name="hint_tarea">Tarea</string>
     <string name="hint_descripcion">Descripción</string>
     <string name="text_finalizada">Finalizada</string>
-    <string name="fecha_actual">Fecha actual</string>
+    <string name="fecha_inicio">Fecha de creación:</string>
     <string name="tarea_vacia">Introduzca una tarea</string>
+    <string name="alfabetic_ordenar">Ordenar por orden alfabetico</string>
+    <string name="fecha_ordenar">Ordenar por fecha finalizacion</string>
+    <string name="ordenar_alfabeticamente">Tareas ordenadas Alfabeticamente</string>
+    <string name="ordenar_fecha">Ordenados por fecha</string>
+    <string name="fecha_finalizacion">Fecha de finalización</string>
+    <string name="hint_fechafin">Fecha finalización</string>
 </resources>
