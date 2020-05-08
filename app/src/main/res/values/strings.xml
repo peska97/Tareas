@@ -37,4 +37,10 @@ limitations under the License. -->
     <string name="button_hora">Hora</string>
     <string name="button_fecha">Fecha</string>
     <string name="button_delete">Borrar</string>
+    <string name="text_filtrar_todas">Filtrar todas</string>
+    <string name="text_filtrar_finalizado">Filtrar finalizadas</string>
+    <string name="text_filtrar_nofinalizado">Filtrar no finalizadas</string>
+    <string name="text_mostrartodas">Todas las Tareas</string>
+    <string name="text_filtrarfin">Finalizadas</string>
+    <string name="text_filtrarnofin">No finalizadas</string>
 </resources>

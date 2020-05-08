@@ -29,6 +29,8 @@ public class TareaRepository {
     //lista de palabras
     private LiveData<List<Tarea>> mAllTareas;
     private LiveData<List<Tarea>> mAllfechasTareas;
+    private LiveData<List<Tarea>> mAllfinalizadoTareas;
+    private LiveData<List<Tarea>> mAllnofinalizadoTareas;
 
     //constructor, obtiene identificacion de BBDD e inicializa las variables
     TareaRepository(Application application) {
@@ -36,6 +38,8 @@ public class TareaRepository {
         mTareaDao = db.TareaDao();
         mAllTareas = mTareaDao.getAllTareas();
         mAllfechasTareas = mTareaDao.getAllfechasTareas();
+        mAllfinalizadoTareas = mTareaDao.getAllfinalizadoTareas();
+        mAllnofinalizadoTareas = mTareaDao.getAllnofinalizadoTareas();
     }
 
     //metodo contenedor, notifica cuando los datos cambian
@@ -45,6 +49,10 @@ public class TareaRepository {
     LiveData<List<Tarea>> getAllfechasTareas() {
         return mAllfechasTareas;
     }
+    LiveData<List<Tarea>> getAllfinalizadoTareas() {
+        return mAllfinalizadoTareas;
+    }
+    LiveData<List<Tarea>> getAllnofinalizadoTareas() { return mAllnofinalizadoTareas;}
 
     //contenedor para insert, llama a un subproceso para que la aplicacion no se bloque
     public void insert(Tarea tarea) {
@@ -61,6 +69,8 @@ public class TareaRepository {
     public void deleteTarea(Tarea tarea) {
         new deleteTareaAsyncTask(mTareaDao).execute(tarea);
     }
+
+
 
     // Static inner classes below here to run database interactions
     // in the background.

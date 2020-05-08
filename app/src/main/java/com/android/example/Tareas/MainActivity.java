@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
+        //ordenar alfabeticamente
         if (id == R.id.ordenar_alfabeticamente) {
             //mensaje toast
             Toast.makeText(this, R.string.ordenar_alfabeticamente, Toast.LENGTH_LONG).show();
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
+        //ordenar por fecha
         if (id == R.id.ordenar_fecha) {
             //mensaje toast
             Toast.makeText(this, R.string.ordenar_fecha, Toast.LENGTH_LONG).show();
@@ -228,6 +230,30 @@ public class MainActivity extends AppCompatActivity {
             adaptador(mOrdenar);
 
             return true;
+        }
+        //filtrar todas
+        if (id == R.id.filtrar_todas){
+            Toast.makeText(this, R.string.text_mostrartodas, Toast.LENGTH_LONG).show();
+            //Cambiar valor de variable
+            mOrdenar = 1;
+            //llama al adaptador
+            adaptador(mOrdenar);
+        }
+        //filtrar por finalizado
+        if (id == R.id.filtrar_finalizado){
+            Toast.makeText(this, R.string.text_filtrarfin, Toast.LENGTH_LONG).show();
+            //Cambiar valor de variable
+            mOrdenar = 2;
+            //llama al adaptador
+            adaptador(mOrdenar);
+        }
+        //filtrar por no finalizado
+        if (id == R.id.filtrar_nofinalizado){
+            Toast.makeText(this, R.string.text_filtrarnofin, Toast.LENGTH_LONG).show();
+            //Cambiar valor de variable
+            mOrdenar = 3;
+            //llama al adaptador
+            adaptador(mOrdenar);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -333,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
         //lo utilizamos para que cuando se destruya la actividad, no se borre
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
 
-
+        //ordenar por fecha
         if (mOrdenar == 1) {
             mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
@@ -343,6 +369,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
+        //ordenar alfabeticamente
         if (mOrdenar == 0) {
             //observador, que actualiza los cambios cuando se producen
             //Obtiene todas las tareas de la BBDD y la asocia al adaptador
@@ -350,6 +377,24 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
                     //Actualiza las tareas en cache
+                    adapter.setTareas(tareas);
+                }
+            });
+        }
+        //filtrar por finalizado
+        if (mOrdenar == 2) {
+            mTareaViewModel.getAllfinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    adapter.setTareas(tareas);
+                }
+            });
+        }
+        //filtrar por no finalizado
+        if (mOrdenar == 3) {
+            mTareaViewModel.getAllnofinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
                     adapter.setTareas(tareas);
                 }
             });

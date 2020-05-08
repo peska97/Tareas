@@ -33,4 +33,23 @@ limitations under the License. -->
         android:orderInCategory="100"
         android:title="@string/fecha_ordenar"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filtrar_todas"
+        android:orderInCategory="100"
+        android:title="@string/text_filtrar_todas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filtrar_finalizado"
+        android:orderInCategory="100"
+        android:title="@string/text_filtrar_finalizado"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filtrar_nofinalizado"
+        android:orderInCategory="100"
+        android:title="@string/text_filtrar_nofinalizado"
+        app:showAsAction="never" />
+
 </menu>

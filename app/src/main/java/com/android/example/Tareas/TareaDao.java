@@ -57,6 +57,14 @@ public interface TareaDao {
     @Query("SELECT * from tarea_table ORDER BY fechafin ASC")
     LiveData<List<Tarea>> getAllfechasTareas();
 
+    //metodo para filtrar por finalizadas
+    @Query("SELECT * from tarea_table WHERE finalizado")
+    LiveData<List<Tarea>> getAllfinalizadoTareas();
+
+    //metodo para filtrar por no finalizadas
+    @Query("SELECT * from tarea_table WHERE not finalizado")
+    LiveData<List<Tarea>> getAllnofinalizadoTareas();
+
     //metodo para actualizar tareas
     @Update
     void update(Tarea... tarea);
