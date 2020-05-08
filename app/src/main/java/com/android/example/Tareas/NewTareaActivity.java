@@ -16,8 +16,11 @@
 
 package com.android.example.Tareas;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +38,7 @@ import com.android.example.Tareas.R;
 
 import java.util.Calendar;
 
+
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
@@ -42,6 +46,8 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
+import static com.android.example.Tareas.MainActivity.EXTRA_TAREA;
+
 
 public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,10 +69,15 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox mFinalizado;
     private Button mButtonFechafin;
     private Button mButtonHorafin;
+    private Button mBorrar;
+
+    private TareaViewModel mTareaViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //lo utilizamos para que cuando se destruya la actividad, no se borre
+        mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
         setContentView(R.layout.activity_new_tarea);
 
         mEditTituloView = findViewById(R.id.edit_titulo);
@@ -75,6 +86,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mTextFechafinView = findViewById(R.id.fecha_fin);
         mTextHorafinView = findViewById(R.id.hora_fin);
         mFinalizado = findViewById(R.id.finalizada);
+        mBorrar = findViewById(R.id.button_delete);
         mButtonFechafin = findViewById(R.id.button_fecha);
         mButtonHorafin = findViewById(R.id.button_hora);
         mButtonFechafin.setOnClickListener(this);
@@ -86,9 +98,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         int mes = c.get(Calendar.MONTH);
         int mescorrecto = mes + 1;
         int dia = c.get(Calendar.DAY_OF_MONTH);
-        String fechacompleta = (dia+ " / " +mescorrecto+ " / " +anio);
+        String fechacompleta = (dia + " / " + mescorrecto + " / " + anio);
         //introducimos la fecha actual
-        if (mTextFechaView.isEnabled()){
+        if (mTextFechaView.isEnabled()) {
             mTextFechaView.setText(fechacompleta);
         }
 
@@ -98,7 +110,10 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
             String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
             if (!titulo.isEmpty()) {
                 mEditTituloView.setText(titulo);
+                //hacer visible otras funciones
                 mFinalizado.setVisibility(View.VISIBLE);
+                mBorrar.setVisibility(View.VISIBLE);
+
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
             if (!descripcion.isEmpty()) {
@@ -123,10 +138,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
-
-        final Button button = findViewById(R.id.button_save);
-        //Cuando tocan a guardar la nueva intencion se para al MainActivity
-        button.setOnClickListener(new View.OnClickListener() {
+        //Cuando tocan boton guardar la nueva intencion se pasa al MainActivity
+        final Button buttonsave = findViewById(R.id.button_save);
+        buttonsave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Crea un nuevo Intent
                 Intent replyIntent = new Intent();
@@ -141,7 +155,10 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     String fechafin = mTextFechafinView.getText().toString();
                     String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
-                    if (mFinalizado.isChecked()){ finalizado = true; };
+                    if (mFinalizado.isChecked()) {
+                        finalizado = true;
+                    }
+                    ;
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
                     replyIntent.putExtra(EXTRA_TITULO, titulo);
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
@@ -149,9 +166,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
                     replyIntent.putExtra(EXTRA_HORAFIN, horafin);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
-                    if (extras !=null && extras.containsKey(EXTRA_DATA_ID)) {
+                    if (extras != null && extras.containsKey(EXTRA_DATA_ID)) {
                         int identificador = extras.getInt(EXTRA_DATA_ID, -1);
-                        if (identificador !=-1) {
+                        if (identificador != -1) {
                             replyIntent.putExtra(EXTRA_ID, identificador);
                         }
                     }
@@ -160,6 +177,22 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 }
                 finish();
             }
+        });
+
+
+        //Cuando tocan boton borrar
+        final Button buttondelete = findViewById(R.id.button_delete);
+        buttondelete.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+
+
+                // Envia el result para acceder borrar la tarea
+                setResult(RESULT_FIRST_USER);
+
+                finish();
+                }
+
         });
     }
 

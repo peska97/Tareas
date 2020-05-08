@@ -36,4 +36,5 @@ limitations under the License. -->
     <string name="hint_horafin">Hora finalización</string>
     <string name="button_hora">Hora</string>
     <string name="button_fecha">Fecha</string>
+    <string name="button_delete">Borrar</string>
 </resources>

@@ -107,4 +107,11 @@ limitations under the License. -->
         android:id="@+id/button_save"
         style="@style/button_style"
         android:text="@string/button_save" />
+
+    <Button
+        android:id="@+id/button_delete"
+        style="@style/text_view_style3"
+        android:text="@string/button_delete"
+        android:visibility="invisible"/>
+
 </LinearLayout>

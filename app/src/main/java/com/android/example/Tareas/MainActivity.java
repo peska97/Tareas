@@ -17,8 +17,10 @@
 package com.android.example.Tareas;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_HORAFIN = "extra_data_update_horafin";
     public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
     public static final String EXTRA_DATA_ID = "extra_data_id";
+    public static final String EXTRA_TAREA = "extra_tarea";
     //para ordenar la lista
     public int mOrdenar;
+    public Tarea tareaPulsada;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         //RecyclerView que llama al adaptador
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
                     //Actualiza las tareas en cache
-                    adapter.setWords(tareas);
+                    adapter.setTareas(tareas);
                 }
             });
 
@@ -108,13 +115,38 @@ public class MainActivity extends AppCompatActivity {
                     //al mover el item a un lado se elimina de la BBDD
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                         int position = viewHolder.getAdapterPosition();
-                        Tarea myTarea = adapter.getTareaAtPosition(position);
-                        Toast.makeText(MainActivity.this,
-                                getString(R.string.delete_word_preamble) + " " +
-                                        myTarea.getTitulo(), Toast.LENGTH_LONG).show();
+                        final Tarea myTarea = adapter.getTareaAtPosition(position);
 
-                        //Eliminar tarea
-                        mTareaViewModel.deleteTarea(myTarea);
+
+                        //para confirmar
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                        alerta.setMessage("Desea borrar esta tarea?")
+                                .setCancelable(false)
+                                .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //cuando le dices que si
+                                                //toast
+                                                Toast.makeText(MainActivity.this,
+                                                        getString(R.string.delete_word_preamble) + " " +
+                                                                myTarea.getTitulo(), Toast.LENGTH_LONG).show();
+                                                //Eliminar tarea
+                                                mTareaViewModel.deleteTarea(myTarea);
+                                            }
+                                        })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        //para volver a mostrar la tarea deslizada
+                                        adaptador(mOrdenar);
+                                    }
+                                });
+                        AlertDialog titulo = alerta.create();
+                        titulo.setTitle("Confirmar");
+                        titulo.show();
+
                     }
                 });
         // Attach the item touch helper to the recycler view
@@ -132,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     //menu de opciones
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,11 +179,32 @@ public class MainActivity extends AppCompatActivity {
 
         //Boton pra borrar todo
         if (id == R.id.clear_data) {
-            //mensaje toast
-            Toast.makeText(this, R.string.clear_data_toast_text, Toast.LENGTH_LONG).show();
+            //para confirmar
+            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+            alerta.setMessage("Desea borrar todas las tareas?")
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener(){
 
-            //Eliminar todos los datos
-            mTareaViewModel.deleteAll();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cuando le dices que si
+                            //toast
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
+                            //Eliminar todos los datos
+                            mTareaViewModel.deleteAll();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle("Confirmar");
+            titulo.show();
+
             return true;
         }
         if (id == R.id.ordenar_alfabeticamente) {
@@ -178,8 +232,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     //devolucion de llamada de la segunda actividad, inserta la palabra en la BBDD
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult( int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -202,20 +257,55 @@ public class MainActivity extends AppCompatActivity {
             int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
             if (identificador != -1) {
                 mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado));
-            } else {
+            } else  {
                 Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
             }
 
-        } else {
+
+        } else if ( resultCode != RESULT_FIRST_USER) {
             //Toast y vuelve a abrir la segunda actividad
             Toast.makeText(
                     this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
             //Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
             //startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
-
         }
 
+        //boton borrar
+        if ( resultCode == RESULT_FIRST_USER) {
+
+            //para confirmar
+            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+            alerta.setMessage("Desea borrar la tarea:"+tareaPulsada.getTitulo())
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cuando le dices que si
+                            //toast
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.delete_word_preamble) + " " +
+                                            tareaPulsada.getTitulo(), Toast.LENGTH_LONG).show();
+                            //Eliminar tarea
+                            mTareaViewModel.deleteTarea(tareaPulsada);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            //cuando le dices que no
+                            //vuelve a abrir la tarea que no quieres borrar
+                            clickenitem(tareaPulsada);
+                        }
+                    });
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle("Confirmar");
+            titulo.show();
+
+        }
     }
+
 
     //click en item
     public void clickenitem(Tarea tarea) {
@@ -227,6 +317,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATA_UPDATE_FECHAFIN, tarea.getFechafin());
         intent.putExtra(EXTRA_DATA_UPDATE_HORAFIN, tarea.getHorafin());
         intent.putExtra(EXTRA_DATA_UPDATE_FINALIZADO, tarea.getFinalizado());
+        intent.putExtra(EXTRA_TAREA, tarea.getClass());
+        tareaPulsada = tarea;
         startActivityForResult(intent, UPDATE_TAREA_ACTIVITY_REQUEST_CODE);
     }
 
@@ -246,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
             mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setWords(tareas);
+                    adapter.setTareas(tareas);
                 }
             });
 
@@ -258,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
                     //Actualiza las tareas en cache
-                    adapter.setWords(tareas);
+                    adapter.setTareas(tareas);
                 }
             });
         }

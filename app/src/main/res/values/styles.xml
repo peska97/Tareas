@@ -60,5 +60,15 @@ limitations under the License. -->
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
+    <style name="text_view_style3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:background">@color/button_red</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">@color/button_black</item>
+    </style>
 </resources>
 

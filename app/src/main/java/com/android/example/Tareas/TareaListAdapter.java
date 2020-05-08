@@ -56,7 +56,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     }
 
 
-    void setWords(List<Tarea> tareas) {
+    void setTareas(List<Tarea> tareas) {
         Tareas = tareas;
         notifyDataSetChanged();
     }
