@@ -1,3 +1,4 @@
+
 package com.android.example.Tareas;
 
 import android.content.Context;
@@ -16,7 +17,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     private List<Tarea> Tareas; // Cached copy of words
     //click en item
     private static ClickListener clickListener;
-
+    private Boolean fin = false;
     TareaListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -24,20 +25,25 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     @Override
     public TareaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //para cambiar el disseño si la tarea esta finalizada
-        if (Tareas != null) {
-            View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
-            return new TareaViewHolder(itemView);
-        }
-        else {
-            View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-            return new TareaViewHolder(itemView);
-        }
+            if (fin == true) {
+                View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
+                return new TareaViewHolder(itemView);
+            } else {
+                View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+                return new TareaViewHolder(itemView);
+            }
 
     }
 
     @Override
     public void onBindViewHolder(TareaViewHolder holder, int position) {
         if (Tareas != null) {
+            if (Tareas.get(position).getFinalizado()==true) {
+                fin = true;
+            }
+            else {
+                fin = false;
+            }
             Tarea current = Tareas.get(position);
             holder.tareaItemView.setText(current.getTitulo());
         } else {

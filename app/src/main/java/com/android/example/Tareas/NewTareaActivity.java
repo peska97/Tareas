@@ -30,7 +30,6 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
-import static com.android.example.Tareas.MainActivity.EXTRA_TAREA;
 
 
 public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
