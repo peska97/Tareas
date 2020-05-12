@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public int mOrdenar;
     public Tarea tareaPulsada;
 
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -51,6 +53,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //actualizar lista al deslizar abajo
+        swipeRefreshLayout =findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //llama al adaptador
+                adaptador(mOrdenar);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         //RecyclerView que llama al adaptador
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
