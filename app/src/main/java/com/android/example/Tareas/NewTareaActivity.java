@@ -1,11 +1,15 @@
 package com.android.example.Tareas;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -42,6 +46,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     public static final String EXTRA_HORAFIN = "com.android.example.roomwordssample.HORAFIN";
     public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
 
+    private final static String CHANNEL_ID = "NOTIFICACIONES";
+    private final static int NOTIFICACION_ID = 0;
+
     private int diafin, mesfin, aniofin, horafin, minutosfin;
 
     private EditText mEditTituloView;
@@ -53,6 +60,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFechafin;
     private Button mButtonHorafin;
     private Button mBorrar;
+
+    private int alarmID = 1;
 
     private TareaViewModel mTareaViewModel;
 
@@ -138,6 +147,20 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     String fechafin = mTextFechafinView.getText().toString();
                     String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
+
+                    String selecterhour = horafin.substring(0,2);
+                    String selectermin = horafin.substring(3,5);
+                    int selechour = Integer.parseInt(selecterhour);
+                    int selecmin = Integer.parseInt(selectermin);
+
+
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.HOUR_OF_DAY, selechour);
+                    today.set(Calendar.MINUTE, selecmin);
+                    today.set(Calendar.SECOND, 0);
+
+                    setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+
                     if (mFinalizado.isChecked()) {
                         finalizado = true;
                     }
@@ -211,5 +234,15 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
             timePickerDialog.show();
 
         }
+    }
+
+    //Crear alarma
+    public static void setAlarm(int i, Long timestamp, Context ctx) {
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(ALARM_SERVICE);
+        Intent alarmIntent = new Intent(ctx, AlarmReceiver.class);
+        PendingIntent pendingIntent;
+        pendingIntent = PendingIntent.getBroadcast(ctx, i, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+        alarmIntent.setData((Uri.parse("custom://" + System.currentTimeMillis())));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timestamp, pendingIntent);
     }
 }

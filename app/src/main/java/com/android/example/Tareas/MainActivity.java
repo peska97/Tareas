@@ -2,13 +2,17 @@ package com.android.example.Tareas;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     //para ordenar la lista
     public int mOrdenar;
     public Tarea tareaPulsada;
-
+    //deslizar hacia abajo
     SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -396,4 +400,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
 }
