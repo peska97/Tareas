@@ -139,13 +139,12 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
-                                        //para volver a mostrar la tarea deslizada
-                                        adaptador(mOrdenar);
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
                         titulo.setTitle("Confirmar");
                         titulo.show();
+                        adaptador(mOrdenar);
 
                     }
                 });

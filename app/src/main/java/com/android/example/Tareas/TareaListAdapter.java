@@ -26,8 +26,14 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     @Override
     public TareaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //para cambiar el disseño si la tarea esta finalizada
+        //para que no de error cuando introduces una nueva o cambias datos
+        if (indicador==Tareas.size()){
+
+        }
+        else {
             fin = Tareas.get(indicador).getFinalizado();
             indicador ++;
+        }
 
             if (fin == true) {
                 View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
@@ -41,14 +47,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
 
     @Override
     public void onBindViewHolder(TareaViewHolder holder, int position) {
-        //if (position < Tareas.size()){ position = position-1; }
         if (Tareas != null) {
-            if (Tareas.get(position).getFinalizado()==true) {
-                fin = true;
-            }
-            else {
-                fin = false;
-            }
             Tarea current = Tareas.get(position);
             holder.tareaItemView.setText(current.getTitulo());
         } else {
