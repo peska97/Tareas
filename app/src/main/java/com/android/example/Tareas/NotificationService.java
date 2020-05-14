@@ -33,7 +33,7 @@ public class NotificationService extends IntentService {
 
     @TargetApi(Build.VERSION_CODES.O)
     @Override
-    protected void onHandleIntent(Intent intent2) {
+    protected void onHandleIntent(Intent alarma) {
         String NOTIFICATION_CHANNEL_ID = getApplicationContext().getString(R.string.app_name);
         Context context = this.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
