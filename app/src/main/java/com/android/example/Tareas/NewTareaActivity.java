@@ -153,35 +153,26 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     Boolean finalizado = false;
 
                     //Crear alarma
-                    String selecterhour = horafin.substring(0,2);
-                    String selectermin = horafin.substring(3,5);
-                    int selechour = Integer.parseInt(selecterhour);
-                    int selecmin = Integer.parseInt(selectermin);
+                    //String selecterhour = horafin.substring(0,2);
+                    //String selectermin = horafin.substring(3,5);
+                    //int selechour = Integer.parseInt(selecterhour);
+                    //int selecmin = Integer.parseInt(selectermin);
 
-                    finalHour = "" + selechour;
-                    finalMinute = "" + selecmin;
-                    if (selechour < 10) finalHour = "0" + selechour;
-                    if (selecmin < 10) finalMinute = "0" + selecmin;
+                    //finalHour = "" + selechour;
+                    //finalMinute = "" + selecmin;
+                    //if (selechour < 10) finalHour = "0" + selechour;
+                    //if (selecmin < 10) finalMinute = "0" + selecmin;
                     //notificationsTime.setText(finalHour + ":" + finalMinute);
 
 
                     //tiempo para pasar a la alarma
-                    Calendar today = Calendar.getInstance();
-                    today.set(Calendar.HOUR_OF_DAY, selechour);
-                    today.set(Calendar.MINUTE, selecmin);
-                    today.set(Calendar.SECOND, 0);
+                    //Calendar today = Calendar.getInstance();
+                    //today.set(Calendar.HOUR_OF_DAY, selechour);
+                    //today.set(Calendar.MINUTE, selecmin);
+                    //today.set(Calendar.SECOND, 0);
 
-                    SharedPreferences.Editor edit = settings.edit();
-                    edit.putString("hour", finalHour);
-                    edit.putString("minute", finalMinute);
-
-                    //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                    edit.putInt("alarmID", alarmID);
-                    edit.putLong("alarmTime", today.getTimeInMillis());
-
-                    edit.commit();
                     //enviar alarma
-                    Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+                    //Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
 
                     if (mFinalizado.isChecked()) {
                         finalizado = true;

@@ -18,6 +18,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     //click en item
     private static ClickListener clickListener;
     private Boolean fin = false;
+    private int indicador = 0;
     TareaListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -25,6 +26,9 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     @Override
     public TareaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //para cambiar el disseño si la tarea esta finalizada
+            fin = Tareas.get(indicador).getFinalizado();
+            indicador ++;
+
             if (fin == true) {
                 View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
                 return new TareaViewHolder(itemView);
@@ -37,6 +41,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
 
     @Override
     public void onBindViewHolder(TareaViewHolder holder, int position) {
+        //if (position < Tareas.size()){ position = position-1; }
         if (Tareas != null) {
             if (Tareas.get(position).getFinalizado()==true) {
                 fin = true;
