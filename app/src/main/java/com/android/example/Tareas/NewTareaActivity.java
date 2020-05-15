@@ -1,5 +1,6 @@
 package com.android.example.Tareas;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -50,7 +51,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private final static String CHANNEL_ID = "NOTIFICACIONES";
     private final static int NOTIFICACION_ID = 0;
 
-    private int diafin, mesfin, aniofin, horafin, minutosfin;
+    //private int diafin, mesfin, aniofin, horafin, minutosfin;
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
@@ -87,6 +88,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mButtonHorafin = findViewById(R.id.button_hora);
         mButtonFechafin.setOnClickListener(this);
         mButtonHorafin.setOnClickListener(this);
+
 
         //creamos la fecha actual
         final Calendar c = Calendar.getInstance();
@@ -152,32 +154,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
 
-                    //Crear alarma
-                    //String selecterhour = horafin.substring(0,2);
-                    //String selectermin = horafin.substring(3,5);
-                    //int selechour = Integer.parseInt(selecterhour);
-                    //int selecmin = Integer.parseInt(selectermin);
-
-                    //finalHour = "" + selechour;
-                    //finalMinute = "" + selecmin;
-                    //if (selechour < 10) finalHour = "0" + selechour;
-                    //if (selecmin < 10) finalMinute = "0" + selecmin;
-                    //notificationsTime.setText(finalHour + ":" + finalMinute);
-
-
-                    //tiempo para pasar a la alarma
-                    //Calendar today = Calendar.getInstance();
-                    //today.set(Calendar.HOUR_OF_DAY, selechour);
-                    //today.set(Calendar.MINUTE, selecmin);
-                    //today.set(Calendar.SECOND, 0);
-
-                    //enviar alarma
-                    //Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
-
                     if (mFinalizado.isChecked()) {
                         finalizado = true;
                     }
-                    ;
                     // Pon el nuevo titulo en los extras para la respuesta Intención.
                     replyIntent.putExtra(EXTRA_TITULO, titulo);
                     replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
@@ -195,6 +174,14 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     setResult(RESULT_OK, replyIntent);
                 }
                 finish();
+            }
+
+            private void alarma(int finalHourt, int finalMinutet) {
+                Calendar today = Calendar.getInstance();
+                today.set(Calendar.HOUR_OF_DAY, finalHourt);
+                today.set(Calendar.MINUTE, finalMinutet);
+                today.set(Calendar.SECOND, 0);
+                //setAlarm(alarmID, today.getTimeInMillis(),NewTareaActivity.this);
             }
         });
 
@@ -220,33 +207,77 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v==mButtonFechafin) {
             final Calendar cf = Calendar.getInstance();
-            diafin = cf.get(Calendar.DAY_OF_MONTH);
-            mesfin = cf.get(Calendar.MONTH);
-            aniofin = cf.get(Calendar.YEAR);
+            int diafin = cf.get(Calendar.DAY_OF_MONTH);
+            int mesfin = cf.get(Calendar.MONTH);
+            int aniofin = cf.get(Calendar.YEAR);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    mTextFechafinView.setText(dayOfMonth+"/"+(month+1)+"/" + year);
+                    String finalDia, finalMes;
+                    month = month+1;
+                    finalDia = ""+dayOfMonth;
+                    finalMes = ""+month;
+                    if (dayOfMonth<10)finalDia = "0"+dayOfMonth;
+                    if (month<10)finalMes = "0"+month;
+                    mTextFechafinView.setText(finalDia+"/"+finalMes+"/" + year);
+
+
                 }
-            }
-            ,diafin,mesfin,aniofin);
+            },diafin,mesfin,aniofin);
             datePickerDialog.show();;
         }
         if (v==mButtonHorafin) {
             final Calendar cf = Calendar.getInstance();
-            horafin = cf.get(Calendar.HOUR_OF_DAY);
-            minutosfin = cf.get(Calendar.MINUTE);
+            int horafin = cf.get(Calendar.HOUR_OF_DAY);
+            int minutosfin = cf.get(Calendar.MINUTE);
+
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                @SuppressLint("StringFormatInvalid")
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    mTextHorafinView.setText(hourOfDay+":"+minute);
+                    String finalHour, finalMinute;
+                    finalHour = ""+hourOfDay;
+                    finalMinute = ""+minute;
+                    if (hourOfDay<10)finalHour = "0"+hourOfDay;
+                    if (minute<10)finalMinute = "0"+minute;
+                    mTextHorafinView.setText(finalHour+":"+finalMinute);
+
+
+                    //Alarma
+                    settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+                    Calendar today = Calendar.getInstance();
+
+                    today.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    today.set(Calendar.MINUTE, minute);
+                    today.set(Calendar.SECOND, 0);
+
+                    SharedPreferences.Editor edit = settings.edit();
+                    edit.putString("hour", finalHour);
+                    edit.putString("minute", finalMinute);
+
+                    //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
+                    edit.putInt("alarmID", alarmID);
+                    edit.putLong("alarmTime", today.getTimeInMillis());
+
+                    edit.commit();
+
+                    Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, finalHour + ":" + finalMinute), Toast.LENGTH_LONG).show();
+
+                    Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+
+
+
+
+
                 }
             },horafin,minutosfin,false);
             timePickerDialog.show();
 
         }
     }
+
 
 }

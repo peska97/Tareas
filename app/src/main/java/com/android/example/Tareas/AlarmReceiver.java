@@ -12,10 +12,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent alarma = new Intent(context, NotificationService.class);
-        alarma.setData((Uri.parse("custom://" + System.currentTimeMillis())));
-        ContextCompat.startForegroundService(context, alarma );
-        Log.d("TAREA", " ALARM RECEIVED!!!");
+        Intent service1 = new Intent(context,NotificationService.class);
+        service1.setData((Uri.parse("custom://" + System.currentTimeMillis())));
+        ContextCompat.startForegroundService(context, service1 );
+        Log.d("TAREAS", " ALARM RECEIVED!!!");
 
     }
 }

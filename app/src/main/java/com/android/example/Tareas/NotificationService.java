@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+
 public class NotificationService extends IntentService {
 
     private NotificationManager notificationManager;
@@ -33,7 +34,7 @@ public class NotificationService extends IntentService {
 
     @TargetApi(Build.VERSION_CODES.O)
     @Override
-    protected void onHandleIntent(Intent alarma) {
+    protected void onHandleIntent(Intent intent2) {
         String NOTIFICATION_CHANNEL_ID = getApplicationContext().getString(R.string.app_name);
         Context context = this.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

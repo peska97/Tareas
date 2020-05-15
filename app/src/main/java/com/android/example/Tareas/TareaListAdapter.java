@@ -28,7 +28,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
         //para cambiar el disseño si la tarea esta finalizada
         //para que no de error cuando introduces una nueva o cambias datos
         if (indicador==Tareas.size()){
-
+            fin = false;
         }
         else {
             fin = Tareas.get(indicador).getFinalizado();

@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.android.example.Tareas.NewTareaActivity;
-import com.android.example.Tareas.R;
-
 public class RebootServiceClass extends IntentService {
 
     /**

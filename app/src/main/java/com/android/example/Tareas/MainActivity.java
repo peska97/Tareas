@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
+                                        adaptador(mOrdenar);
                                     }
                                 });
                         AlertDialog titulo = alerta.create();

@@ -52,14 +52,6 @@ limitations under the License. -->
             android:value=".MainActivity"/>
         </activity>
 
-        <receiver
-            android:name="com.walkiriaapps.alarmmanagersampl.AlarmReceiver"
-            android:enabled="true" />
-
-        <service
-            android:name="com.walkiriaapps.alarmmanagersampl.NotificationService"
-            android:enabled="true" />
-
     </application>
 
 
