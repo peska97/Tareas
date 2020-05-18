@@ -139,6 +139,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         //Cuando tocan boton guardar la nueva intencion se pasa al MainActivity
         final Button buttonsave = findViewById(R.id.button_save);
         buttonsave.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("StringFormatInvalid")
             public void onClick(View view) {
                 // Crea un nuevo Intent
                 Intent replyIntent = new Intent();
@@ -153,6 +154,61 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     String fechafin = mTextFechafinView.getText().toString();
                     String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
+
+                    //cuando introduces una fecha
+                    if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
+                        //cuando introduces un hora
+                        if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
+                            //alarmID=alarmID+1;
+                            //valores alarma
+                            String salanio, salmes, saldia, salhora, salminute;
+
+                            salanio = fechafin.substring(6,10);
+                            salmes = fechafin.substring(3,5);
+                            saldia = fechafin.substring(0,2);
+                            salhora = horafin.substring(0,2);
+                            salminute = horafin.substring(3,5);
+                            int alanio = Integer.parseInt(salanio);
+                            int almes = Integer.parseInt(salmes);
+                            int aldia = Integer.parseInt(saldia);
+                            int alhora = Integer.parseInt(salhora);
+                            int alminute = Integer.parseInt(salminute);
+
+                            //Alarma
+                            settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+                            Calendar today = Calendar.getInstance();
+
+                            today.set(Calendar.YEAR, alanio);
+                            today.set(Calendar.MONTH, almes);
+                            today.set(Calendar.YEAR, aldia);
+                            today.set(Calendar.HOUR_OF_DAY, alhora);
+                            today.set(Calendar.MINUTE, alminute);
+                            today.set(Calendar.SECOND, 0);
+
+                            SharedPreferences.Editor edit = settings.edit();
+                            edit.putString("hour", salhora);
+                            edit.putString("minute", salminute);
+
+                            //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
+                            edit.putInt("alarmID", alarmID);
+                            edit.putLong("alarmTime", today.getTimeInMillis());
+
+                            edit.commit();
+
+                            Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast,(titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
+
+                            Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+                        }
+
+                    }
+
+
+
+
+
+
+
 
                     if (mFinalizado.isChecked()) {
                         finalizado = true;
@@ -176,13 +232,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 finish();
             }
 
-            private void alarma(int finalHourt, int finalMinutet) {
-                Calendar today = Calendar.getInstance();
-                today.set(Calendar.HOUR_OF_DAY, finalHourt);
-                today.set(Calendar.MINUTE, finalMinutet);
-                today.set(Calendar.SECOND, 0);
-                //setAlarm(alarmID, today.getTimeInMillis(),NewTareaActivity.this);
-            }
         });
 
 
@@ -243,31 +292,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     if (hourOfDay<10)finalHour = "0"+hourOfDay;
                     if (minute<10)finalMinute = "0"+minute;
                     mTextHorafinView.setText(finalHour+":"+finalMinute);
-
-
-                    //Alarma
-                    settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-
-                    Calendar today = Calendar.getInstance();
-
-                    today.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    today.set(Calendar.MINUTE, minute);
-                    today.set(Calendar.SECOND, 0);
-
-                    SharedPreferences.Editor edit = settings.edit();
-                    edit.putString("hour", finalHour);
-                    edit.putString("minute", finalMinute);
-
-                    //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                    edit.putInt("alarmID", alarmID);
-                    edit.putLong("alarmTime", today.getTimeInMillis());
-
-                    edit.commit();
-
-                    Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, finalHour + ":" + finalMinute), Toast.LENGTH_LONG).show();
-
-                    Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
-
 
 
 
