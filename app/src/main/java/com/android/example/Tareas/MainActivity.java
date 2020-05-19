@@ -1,11 +1,14 @@
 package com.android.example.Tareas;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_FECHAFIN = "extra_data_update_fechafin";
     public static final String EXTRA_DATA_UPDATE_HORAFIN = "extra_data_update_horafin";
     public static final String EXTRA_DATA_UPDATE_FINALIZADO = "extra_data_update_finalizado";
+    public static final String EXTRA_DATA_UPDATE_ALARMAID = "extra_data_update_alarma";
     public static final String EXTRA_DATA_ID = "extra_data_id";
     public static final String EXTRA_TAREA = "extra_tarea";
     //para ordenar la lista
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public Tarea tareaPulsada;
     //deslizar hacia abajo
     SwipeRefreshLayout swipeRefreshLayout;
+
 
 
     @Override
@@ -127,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 //cuando le dices que si
+                                                //borrar alarma
+                                                Utils.deleteAlarm(myTarea.getAlarmaid(), MainActivity.this);
+
                                                 //toast
                                                 Toast.makeText(MainActivity.this,
                                                         getString(R.string.delete_word_preamble) + " " +
@@ -188,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //cuando le dices que si
+                            //borrar alarma
+                            //Utils.deleteAlarm(alarmID, MainActivity.this);
                             //toast
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
@@ -270,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHA),
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN),
                     data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN),
-                    data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false));
+                    data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false),
+                    data.getIntExtra(NewTareaActivity.EXTRA_ALARMAID,0));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
         } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -280,9 +291,10 @@ public class MainActivity extends AppCompatActivity {
             String fechafin = data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN);
             String horafin = data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN);
             Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
+            Integer alarmaid = data.getIntExtra(NewTareaActivity.EXTRA_ALARMAID, 0);
             int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
             if (identificador != -1) {
-                mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado));
+                mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado, alarmaid));
             } else  {
                 Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
             }
@@ -308,6 +320,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //cuando le dices que si
+                            //borrar alarma
+                            Utils.deleteAlarm(tareaPulsada.getAlarmaid(), MainActivity.this);
                             //toast
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.delete_word_preamble) + " " +

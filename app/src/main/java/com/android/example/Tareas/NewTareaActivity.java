@@ -36,6 +36,7 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_ALARMAID;
 
 
 public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,9 +48,11 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     public static final String EXTRA_FECHAFIN = "com.android.example.roomwordssample.FECHAFIN";
     public static final String EXTRA_HORAFIN = "com.android.example.roomwordssample.HORAFIN";
     public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
+    public static final String EXTRA_ALARMAID = "com.android.example.roomwordssample.ALARMAID";
 
     private final static String CHANNEL_ID = "NOTIFICACIONES";
     private final static int NOTIFICACION_ID = 0;
+    private Integer contadoralarma=1;
 
     //private int diafin, mesfin, aniofin, horafin, minutosfin;
 
@@ -59,17 +62,18 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private EditText mTextFechafinView;
     private EditText mTextHorafinView;
     private CheckBox mFinalizado;
+    private EditText mTextAlarmaid;
     private Button mButtonFechafin;
     private Button mButtonHorafin;
     private Button mBorrar;
 
-    private int alarmID = 1;
 
     private TareaViewModel mTareaViewModel;
 
-    private String finalHour, finalMinute;
+    //private String finalHour, finalMinute;
     private SharedPreferences settings;
 
+    @SuppressLint("WrongViewCast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +90,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mBorrar = findViewById(R.id.button_delete);
         mButtonFechafin = findViewById(R.id.button_fecha);
         mButtonHorafin = findViewById(R.id.button_hora);
+        mTextAlarmaid = findViewById(R.id.alarmaidtext);
         mButtonFechafin.setOnClickListener(this);
         mButtonHorafin.setOnClickListener(this);
 
@@ -101,6 +106,10 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         if (mTextFechaView.isEnabled()) {
             mTextFechaView.setText(fechacompleta);
         }
+        if (mTextAlarmaid.isEnabled()){
+            mTextAlarmaid.setText(contadoralarma);
+            contadoralarma=contadoralarma+1;
+        }
 
         //cuando accedas a la clase por medio de click en item
         final Bundle extras = getIntent().getExtras();
@@ -111,6 +120,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 //hacer visible otras funciones
                 mFinalizado.setVisibility(View.VISIBLE);
                 mBorrar.setVisibility(View.VISIBLE);
+                Integer alarmaid = extras.getInt(EXTRA_DATA_UPDATE_ALARMAID);
+                mEditDescripcionView.setText(alarmaid);
 
             }
             String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
@@ -154,51 +165,59 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     String fechafin = mTextFechafinView.getText().toString();
                     String horafin = mTextHorafinView.getText().toString();
                     Boolean finalizado = false;
+                    String alarmaidstring = mTextAlarmaid.getText().toString();
+                    Integer alarmaid = Integer.parseInt(alarmaidstring);
+                    //contadoralarma = contadoralarma+1;
 
-                    //cuando introduces una fecha
-                    if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
+                    //cuando introduces una fecha correcta
+                    if (fechafin.length()>8) {
                         //cuando introduces un hora
                         if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
-                            //alarmID=alarmID+1;
                             //valores alarma
                             String salanio, salmes, saldia, salhora, salminute;
 
-                            salanio = fechafin.substring(6,10);
-                            salmes = fechafin.substring(3,5);
-                            saldia = fechafin.substring(0,2);
+                            //salanio = fechafin.substring(6,10);
+                            //salmes = fechafin.substring(3,5);
+                            //saldia = fechafin.substring(0,2);
                             salhora = horafin.substring(0,2);
                             salminute = horafin.substring(3,5);
-                            int alanio = Integer.parseInt(salanio);
-                            int almes = Integer.parseInt(salmes);
-                            int aldia = Integer.parseInt(saldia);
+                            //int alanio = Integer.parseInt(salanio);
+                            //int almes = Integer.parseInt(salmes);
+                            //int aldia = Integer.parseInt(saldia);
                             int alhora = Integer.parseInt(salhora);
                             int alminute = Integer.parseInt(salminute);
+
 
                             //Alarma
                             settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 
                             Calendar today = Calendar.getInstance();
 
-                            today.set(Calendar.YEAR, alanio);
-                            today.set(Calendar.MONTH, almes);
-                            today.set(Calendar.YEAR, aldia);
+                            //today.set(Calendar.YEAR, alanio);
+                            //today.set(Calendar.MONTH, almes);
+                            //today.set(Calendar.YEAR, aldia);
                             today.set(Calendar.HOUR_OF_DAY, alhora);
                             today.set(Calendar.MINUTE, alminute);
                             today.set(Calendar.SECOND, 0);
 
                             SharedPreferences.Editor edit = settings.edit();
+                            //edit.putString("anio", salanio);
+                            //edit.putString("mes", salmes);
+                            //edit.putString("day", saldia);
                             edit.putString("hour", salhora);
                             edit.putString("minute", salminute);
 
                             //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                            edit.putInt("alarmID", alarmID);
+                            edit.putInt("alarmID", alarmaid);
                             edit.putLong("alarmTime", today.getTimeInMillis());
 
                             edit.commit();
 
-                            Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast,(titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
+                            Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, /*saldia +"/" + salmes +"/"+ salanio+" - "+*/salhora + ":" + salminute), Toast.LENGTH_LONG).show();
 
-                            Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+                            //alarmaid = alarmaid+1;
+
+                            Utils.setAlarm(alarmaid, today.getTimeInMillis(), NewTareaActivity.this);
                         }
 
                     }
@@ -220,6 +239,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
                     replyIntent.putExtra(EXTRA_HORAFIN, horafin);
                     replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
+                    replyIntent.putExtra(EXTRA_ALARMAID, alarmaid);
                     if (extras != null && extras.containsKey(EXTRA_DATA_ID)) {
                         int identificador = extras.getInt(EXTRA_DATA_ID, -1);
                         if (identificador != -1) {

@@ -32,18 +32,22 @@ public class Tarea {
     @ColumnInfo(name = "finalizado")
     private Boolean finalizado;
 
+    @ColumnInfo(name = "alarmaid")
+    private Integer alarmaid;
 
-    public Tarea(@NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado){
+
+    public Tarea(@NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, Integer alarmaid){
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.fechafin = fechafin;
         this.horafin = horafin;
         this.finalizado = finalizado;
+        this.alarmaid = alarmaid;
     }
 
     @Ignore
-    public Tarea(int identificador, @NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado) {
+    public Tarea(int identificador, @NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, Integer alarmaid) {
         this.identificador = identificador;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -51,25 +55,19 @@ public class Tarea {
         this.fechafin = fechafin;
         this.horafin = horafin;
         this.finalizado = finalizado;
+        this.alarmaid = alarmaid;
     }
 
 
 
     public  int getIdentificador() {return this.identificador;}
-    public String getTitulo(){
-        return this.titulo;
-    }
+    public String getTitulo(){ return this.titulo; }
     public String getDescripcion(){return this.descripcion;}
-    public String getFecha(){
-        return this.fecha;
-    }
-    public String getFechafin(){
-        return this.fechafin;
-    }
+    public String getFecha(){ return this.fecha; }
+    public String getFechafin(){ return this.fechafin; }
     public String getHorafin() {return this.horafin; }
-    public Boolean getFinalizado(){
-        return this.finalizado;
-    }
+    public Boolean getFinalizado(){ return this.finalizado; }
+    public Integer getAlarmaid(){ return this.alarmaid; }
 
     public void setIdentificador(int identificador) {this.identificador = identificador;}
     public void setTitulo() { this.titulo = titulo; }
@@ -78,4 +76,5 @@ public class Tarea {
     public void setFechafin() { this.fechafin = fechafin; }
     public void setHorafin() {this.horafin = horafin; }
     public void setFinalizado() { this.finalizado = finalizado; }
+    public void setAlarmaid() { this.alarmaid = alarmaid;}
 }
