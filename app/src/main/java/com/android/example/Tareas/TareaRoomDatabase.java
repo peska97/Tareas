@@ -64,7 +64,7 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         private static String fechafin = "9/9/9";
         private static String horafin = "00:00";
         private static Boolean finalizado = false;
-        private static Integer[] alarmaid = {-7, -6, -5, -4, -3, -2, -1};
+        private static String[] alarmaid = {"-1","-2","-3","-4","-5","-6","-7"};
 
         PopulateDbAsync(TareaRoomDatabase db) {
             mDao = db.TareaDao();

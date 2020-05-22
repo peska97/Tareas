@@ -44,6 +44,6 @@ limitations under the License. -->
     <string name="text_filtrarfin">Finalizadas</string>
     <string name="text_filtrarnofin">No finalizadas</string>
 
-    <string name="new_notification">Tarea finalizada</string>
+    <string name="new_notification">Nueva notificación</string>
     <string name="notificaciontoast">Alarma creada</string>
 </resources>

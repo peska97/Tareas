@@ -30,13 +30,13 @@ import java.util.Calendar;
 
 
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_ALARMAID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHA;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
-import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_ALARMAID;
 
 
 public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
@@ -52,9 +52,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
     private final static String CHANNEL_ID = "NOTIFICACIONES";
     private final static int NOTIFICACION_ID = 0;
-    private Integer contadoralarma=1;
 
-    //private int diafin, mesfin, aniofin, horafin, minutosfin;
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
@@ -62,18 +60,19 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private EditText mTextFechafinView;
     private EditText mTextHorafinView;
     private CheckBox mFinalizado;
-    private EditText mTextAlarmaid;
     private Button mButtonFechafin;
     private Button mButtonHorafin;
     private Button mBorrar;
+    private TextView mTextAlarmaidView;
 
+    private int alarmID = 1;
+    private int contadoralarma = 1;
 
     private TareaViewModel mTareaViewModel;
 
-    //private String finalHour, finalMinute;
+    private String finalHour, finalMinute;
     private SharedPreferences settings;
 
-    @SuppressLint("WrongViewCast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +89,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mBorrar = findViewById(R.id.button_delete);
         mButtonFechafin = findViewById(R.id.button_fecha);
         mButtonHorafin = findViewById(R.id.button_hora);
-        mTextAlarmaid = findViewById(R.id.alarmaidtext);
         mButtonFechafin.setOnClickListener(this);
         mButtonHorafin.setOnClickListener(this);
+        mTextAlarmaidView = findViewById(R.id.alarmaid_text);
 
 
         //creamos la fecha actual
@@ -106,222 +105,215 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         if (mTextFechaView.isEnabled()) {
             mTextFechaView.setText(fechacompleta);
         }
-        if (mTextAlarmaid.isEnabled()){
-            mTextAlarmaid.setText(contadoralarma);
-            contadoralarma=contadoralarma+1;
-        }
 
-        //cuando accedas a la clase por medio de click en item
-        final Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
-            if (!titulo.isEmpty()) {
-                mEditTituloView.setText(titulo);
-                //hacer visible otras funciones
-                mFinalizado.setVisibility(View.VISIBLE);
-                mBorrar.setVisibility(View.VISIBLE);
-                Integer alarmaid = extras.getInt(EXTRA_DATA_UPDATE_ALARMAID);
-                mEditDescripcionView.setText(alarmaid);
+        //introducimos un nuevo alarmaid si no esta creado ya
+        if (mTextAlarmaidView.isEnabled()) {
+            mTextAlarmaidView.setText(contadoralarma);
+            //para darle un valor diferente a la proxima alarma
+            contadoralarma = contadoralarma + 1;
 
-            }
-            String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
-            if (!descripcion.isEmpty()) {
-                mEditDescripcionView.setText(descripcion);
-            }
-            String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
-            if (!fecha.isEmpty()) {
-                mTextFechaView.setText(fecha);
-            }
-            String fechafin = extras.getString(EXTRA_DATA_UPDATE_FECHAFIN, "");
-            if (!fechafin.isEmpty()) {
-                mTextFechafinView.setText(fechafin);
-            }
-            String horafin = extras.getString(EXTRA_DATA_UPDATE_HORAFIN, "");
-            if (!horafin.isEmpty()) {
-                mTextHorafinView.setText(horafin);
-            }
-            Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
-            if (finalizado == true) {
-                mFinalizado.setChecked(true);
-            }
-        }
-
-
-        //Cuando tocan boton guardar la nueva intencion se pasa al MainActivity
-        final Button buttonsave = findViewById(R.id.button_save);
-        buttonsave.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("StringFormatInvalid")
-            public void onClick(View view) {
-                // Crea un nuevo Intent
-                Intent replyIntent = new Intent();
-                //cuando no introduces ninguna tarea
-                if (TextUtils.isEmpty(mEditTituloView.getText())) {
-                    setResult(RESULT_CANCELED, replyIntent);
-                } else {
-                    // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
-                    String titulo = mEditTituloView.getText().toString();
-                    String descripcion = mEditDescripcionView.getText().toString();
-                    String fecha = mTextFechaView.getText().toString();
-                    String fechafin = mTextFechafinView.getText().toString();
-                    String horafin = mTextHorafinView.getText().toString();
-                    Boolean finalizado = false;
-                    String alarmaidstring = mTextAlarmaid.getText().toString();
-                    Integer alarmaid = Integer.parseInt(alarmaidstring);
-                    //contadoralarma = contadoralarma+1;
-
-                    //cuando introduces una fecha correcta
-                    if (fechafin.length()>8) {
-                        //cuando introduces un hora
-                        if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
-                            //valores alarma
-                            String salanio, salmes, saldia, salhora, salminute;
-
-                            //salanio = fechafin.substring(6,10);
-                            //salmes = fechafin.substring(3,5);
-                            //saldia = fechafin.substring(0,2);
-                            salhora = horafin.substring(0,2);
-                            salminute = horafin.substring(3,5);
-                            //int alanio = Integer.parseInt(salanio);
-                            //int almes = Integer.parseInt(salmes);
-                            //int aldia = Integer.parseInt(saldia);
-                            int alhora = Integer.parseInt(salhora);
-                            int alminute = Integer.parseInt(salminute);
-
-
-                            //Alarma
-                            settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-
-                            Calendar today = Calendar.getInstance();
-
-                            //today.set(Calendar.YEAR, alanio);
-                            //today.set(Calendar.MONTH, almes);
-                            //today.set(Calendar.YEAR, aldia);
-                            today.set(Calendar.HOUR_OF_DAY, alhora);
-                            today.set(Calendar.MINUTE, alminute);
-                            today.set(Calendar.SECOND, 0);
-
-                            SharedPreferences.Editor edit = settings.edit();
-                            //edit.putString("anio", salanio);
-                            //edit.putString("mes", salmes);
-                            //edit.putString("day", saldia);
-                            edit.putString("hour", salhora);
-                            edit.putString("minute", salminute);
-
-                            //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                            edit.putInt("alarmID", alarmaid);
-                            edit.putLong("alarmTime", today.getTimeInMillis());
-
-                            edit.commit();
-
-                            Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, /*saldia +"/" + salmes +"/"+ salanio+" - "+*/salhora + ":" + salminute), Toast.LENGTH_LONG).show();
-
-                            //alarmaid = alarmaid+1;
-
-                            Utils.setAlarm(alarmaid, today.getTimeInMillis(), NewTareaActivity.this);
-                        }
-
-                    }
-
-
-
-
-
-
-
-
-                    if (mFinalizado.isChecked()) {
-                        finalizado = true;
-                    }
-                    // Pon el nuevo titulo en los extras para la respuesta Intención.
-                    replyIntent.putExtra(EXTRA_TITULO, titulo);
-                    replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
-                    replyIntent.putExtra(EXTRA_FECHA, fecha);
-                    replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
-                    replyIntent.putExtra(EXTRA_HORAFIN, horafin);
-                    replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
-                    replyIntent.putExtra(EXTRA_ALARMAID, alarmaid);
-                    if (extras != null && extras.containsKey(EXTRA_DATA_ID)) {
-                        int identificador = extras.getInt(EXTRA_DATA_ID, -1);
-                        if (identificador != -1) {
-                            replyIntent.putExtra(EXTRA_ID, identificador);
-                        }
-                    }
-                    // Establece el estado del resultado para indicar éxito.
-                    setResult(RESULT_OK, replyIntent);
-                }
-                finish();
-            }
-
-        });
-
-
-        //Cuando tocan boton borrar
-        final Button buttondelete = findViewById(R.id.button_delete);
-        buttondelete.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-
-
-                // Envia el result para acceder borrar la tarea
-                setResult(RESULT_FIRST_USER);
-
-                finish();
-                }
-
-        });
-    }
-
-    //para introducir las fechas en la parte visual, dandole a los botones
-    @Override
-    public void onClick(View v) {
-        if (v==mButtonFechafin) {
-            final Calendar cf = Calendar.getInstance();
-            int diafin = cf.get(Calendar.DAY_OF_MONTH);
-            int mesfin = cf.get(Calendar.MONTH);
-            int aniofin = cf.get(Calendar.YEAR);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    String finalDia, finalMes;
-                    month = month+1;
-                    finalDia = ""+dayOfMonth;
-                    finalMes = ""+month;
-                    if (dayOfMonth<10)finalDia = "0"+dayOfMonth;
-                    if (month<10)finalMes = "0"+month;
-                    mTextFechafinView.setText(finalDia+"/"+finalMes+"/" + year);
-
+            //cuando accedas a la clase por medio de click en item
+            final Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
+                String alarmaid = extras.getString(EXTRA_DATA_UPDATE_ALARMAID, "");
+                if (!titulo.isEmpty()) {
+                    mEditTituloView.setText(titulo);
+                    //hacer visible otras funciones
+                    mFinalizado.setVisibility(View.VISIBLE);
+                    mBorrar.setVisibility(View.VISIBLE);
+                    //mostrar id de alarma
+                    mTextAlarmaidView.setText(alarmaid);
 
                 }
-            },diafin,mesfin,aniofin);
-            datePickerDialog.show();;
-        }
-        if (v==mButtonHorafin) {
-            final Calendar cf = Calendar.getInstance();
-            int horafin = cf.get(Calendar.HOUR_OF_DAY);
-            int minutosfin = cf.get(Calendar.MINUTE);
+                String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
+                if (!descripcion.isEmpty()) {
+                    mEditDescripcionView.setText(descripcion);
+                }
+                String fecha = extras.getString(EXTRA_DATA_UPDATE_FECHA, "");
+                if (!fecha.isEmpty()) {
+                    mTextFechaView.setText(fecha);
+                }
+                String fechafin = extras.getString(EXTRA_DATA_UPDATE_FECHAFIN, "");
+                if (!fechafin.isEmpty()) {
+                    mTextFechafinView.setText(fechafin);
+                }
+                String horafin = extras.getString(EXTRA_DATA_UPDATE_HORAFIN, "");
+                if (!horafin.isEmpty()) {
+                    mTextHorafinView.setText(horafin);
+                }
+                Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
+                if (finalizado == true) {
+                    mFinalizado.setChecked(true);
+                }
+            }
 
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            //Cuando tocan boton guardar la nueva intencion se pasa al MainActivity
+            final Button buttonsave = findViewById(R.id.button_save);
+            buttonsave.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("StringFormatInvalid")
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String finalHour, finalMinute;
-                    finalHour = ""+hourOfDay;
-                    finalMinute = ""+minute;
-                    if (hourOfDay<10)finalHour = "0"+hourOfDay;
-                    if (minute<10)finalMinute = "0"+minute;
-                    mTextHorafinView.setText(finalHour+":"+finalMinute);
+                public void onClick(View view) {
+                    // Crea un nuevo Intent
+                    Intent replyIntent = new Intent();
+                    //cuando no introduces ninguna tarea
+                    if (TextUtils.isEmpty(mEditTituloView.getText())) {
+                        setResult(RESULT_CANCELED, replyIntent);
+                    } else {
+                        // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
+                        String titulo = mEditTituloView.getText().toString();
+                        String descripcion = mEditDescripcionView.getText().toString();
+                        String fecha = mTextFechaView.getText().toString();
+                        String fechafin = mTextFechafinView.getText().toString();
+                        String horafin = mTextHorafinView.getText().toString();
+                        String alarmaid = mTextAlarmaidView.getText().toString();
+                        Boolean finalizado = false;
+
+                        //cuando introduces una fecha
+                        if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
+                            //cuando introduces un hora
+                            if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
+                                //alarmID=alarmID+1;
+                                //valores alarma
+                                String salanio, salmes, saldia, salhora, salminute;
+
+                                //salanio = fechafin.substring(6,10);
+                                //salmes = fechafin.substring(3,5);
+                                //saldia = fechafin.substring(0,2);
+                                salhora = horafin.substring(0, 2);
+                                salminute = horafin.substring(3, 5);
+                                //int alanio = Integer.parseInt(salanio);
+                                //int almes = Integer.parseInt(salmes);
+                                //int aldia = Integer.parseInt(saldia);
+                                int alhora = Integer.parseInt(salhora);
+                                int alminute = Integer.parseInt(salminute);
+
+                                //Alarma
+                                settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+                                Calendar today = Calendar.getInstance();
+
+                                //today.set(Calendar.YEAR, alanio);
+                                //today.set(Calendar.MONTH, almes);
+                                //today.set(Calendar.YEAR, aldia);
+                                today.set(Calendar.HOUR_OF_DAY, alhora);
+                                today.set(Calendar.MINUTE, alminute);
+                                today.set(Calendar.SECOND, 0);
+
+                                SharedPreferences.Editor edit = settings.edit();
+                                edit.putString("hour", salhora);
+                                edit.putString("minute", salminute);
+
+                                //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
+                                edit.putInt("alarmID", alarmID);
+                                edit.putLong("alarmTime", today.getTimeInMillis());
+
+                                edit.commit();
+
+                                Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, (titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
+
+                                Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+                            }
+
+                        }
 
 
-
-
+                        if (mFinalizado.isChecked()) {
+                            finalizado = true;
+                        }
+                        // Pon el nuevo titulo en los extras para la respuesta Intención.
+                        replyIntent.putExtra(EXTRA_TITULO, titulo);
+                        replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
+                        replyIntent.putExtra(EXTRA_FECHA, fecha);
+                        replyIntent.putExtra(EXTRA_FECHAFIN, fechafin);
+                        replyIntent.putExtra(EXTRA_HORAFIN, horafin);
+                        replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
+                        replyIntent.putExtra(EXTRA_ALARMAID, alarmaid);
+                        if (extras != null && extras.containsKey(EXTRA_DATA_ID)) {
+                            int identificador = extras.getInt(EXTRA_DATA_ID, -1);
+                            if (identificador != -1) {
+                                replyIntent.putExtra(EXTRA_ID, identificador);
+                            }
+                        }
+                        // Establece el estado del resultado para indicar éxito.
+                        setResult(RESULT_OK, replyIntent);
+                    }
+                    finish();
                 }
-            },horafin,minutosfin,false);
-            timePickerDialog.show();
 
+            });
+
+
+            //Cuando tocan boton borrar
+            final Button buttondelete = findViewById(R.id.button_delete);
+            buttondelete.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View view) {
+
+
+                    // Envia el result para acceder borrar la tarea
+                    setResult(RESULT_FIRST_USER);
+
+                    finish();
+                }
+
+            });
         }
     }
 
+        //para introducir las fechas en la parte visual, dandole a los botones
+
+
+    @Override
+    public void onClick(View v){
+            if (v == mButtonFechafin) {
+                final Calendar cf = Calendar.getInstance();
+                int diafin = cf.get(Calendar.DAY_OF_MONTH);
+                int mesfin = cf.get(Calendar.MONTH);
+                int aniofin = cf.get(Calendar.YEAR);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String finalDia, finalMes;
+                        month = month + 1;
+                        finalDia = "" + dayOfMonth;
+                        finalMes = "" + month;
+                        if (dayOfMonth < 10) finalDia = "0" + dayOfMonth;
+                        if (month < 10) finalMes = "0" + month;
+                        mTextFechafinView.setText(finalDia + "/" + finalMes + "/" + year);
+
+
+                    }
+                }, diafin, mesfin, aniofin);
+                datePickerDialog.show();
+
+            }
+            if (v == mButtonHorafin) {
+                final Calendar cf = Calendar.getInstance();
+                int horafin = cf.get(Calendar.HOUR_OF_DAY);
+                int minutosfin = cf.get(Calendar.MINUTE);
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                    @SuppressLint("StringFormatInvalid")
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String finalHour, finalMinute;
+                        finalHour = "" + hourOfDay;
+                        finalMinute = "" + minute;
+                        if (hourOfDay < 10) finalHour = "0" + hourOfDay;
+                        if (minute < 10) finalMinute = "0" + minute;
+                        mTextHorafinView.setText(finalHour + ":" + finalMinute);
+
+
+                    }
+                }, horafin, minutosfin, false);
+                timePickerDialog.show();
+
+            }
+        }
 
 }
+
+
