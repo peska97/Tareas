@@ -66,7 +66,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private TextView mTextAlarmaidView;
 
     private int alarmID = 1;
-    private int contadoralarma = 1;
+    private String contadoralarma;
+    private int contadoralarmaint;
 
     private TareaViewModel mTareaViewModel;
 
@@ -108,9 +109,10 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
         //introducimos un nuevo alarmaid si no esta creado ya
         if (mTextAlarmaidView.isEnabled()) {
+            contadoralarma = String.valueOf(contadoralarmaint);
             mTextAlarmaidView.setText(contadoralarma);
             //para darle un valor diferente a la proxima alarma
-            contadoralarma = contadoralarma + 1;
+            contadoralarmaint = contadoralarmaint + 1;
 
             //cuando accedas a la clase por medio de click en item
             final Bundle extras = getIntent().getExtras();
@@ -167,13 +169,13 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         String fechafin = mTextFechafinView.getText().toString();
                         String horafin = mTextHorafinView.getText().toString();
                         String alarmaid = mTextAlarmaidView.getText().toString();
+                        Integer alarmaidint = Integer.parseInt(alarmaid);
                         Boolean finalizado = false;
 
                         //cuando introduces una fecha
                         if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
                             //cuando introduces un hora
                             if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
-                                //alarmID=alarmID+1;
                                 //valores alarma
                                 String salanio, salmes, saldia, salhora, salminute;
 
@@ -205,14 +207,14 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                 edit.putString("minute", salminute);
 
                                 //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                                edit.putInt("alarmID", alarmID);
+                                edit.putInt("alarmID", alarmaidint);
                                 edit.putLong("alarmTime", today.getTimeInMillis());
 
                                 edit.commit();
 
                                 Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, (titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
 
-                                Utils.setAlarm(alarmID, today.getTimeInMillis(), NewTareaActivity.this);
+                                Utils.setAlarm(alarmaidint, today.getTimeInMillis(), NewTareaActivity.this);
                             }
 
                         }
