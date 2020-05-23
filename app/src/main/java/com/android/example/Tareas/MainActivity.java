@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                                                                 myTarea.getTitulo(), Toast.LENGTH_LONG).show();
                                                 //Eliminar tarea
                                                 mTareaViewModel.deleteTarea(myTarea);
+                                                //Elimina la alarma
+                                                //Utils.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()),MainActivity.this);
                                             }
                                         })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

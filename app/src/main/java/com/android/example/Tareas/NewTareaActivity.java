@@ -65,7 +65,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private Button mBorrar;
     private TextView mTextAlarmaidView;
 
-    private int alarmID = 1;
+    //private int alarmID = 1;
     private String contadoralarma;
     private int contadoralarmaint;
 
@@ -112,7 +112,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
             contadoralarma = String.valueOf(contadoralarmaint);
             mTextAlarmaidView.setText(contadoralarma);
             //para darle un valor diferente a la proxima alarma
-            contadoralarmaint = contadoralarmaint + 1;
+
+        }
 
             //cuando accedas a la clase por medio de click en item
             final Bundle extras = getIntent().getExtras();
@@ -172,6 +173,10 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         Integer alarmaidint = Integer.parseInt(alarmaid);
                         Boolean finalizado = false;
 
+                        //para darle un valor diferente a la proxima alarma
+                        int cont = contadoralarmaint + 1;
+                        contadoralarmaint = cont;
+
                         //cuando introduces una fecha
                         if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
                             //cuando introduces un hora
@@ -191,30 +196,9 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                 int alminute = Integer.parseInt(salminute);
 
                                 //Alarma
-                                settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-
-                                Calendar today = Calendar.getInstance();
-
-                                //today.set(Calendar.YEAR, alanio);
-                                //today.set(Calendar.MONTH, almes);
-                                //today.set(Calendar.YEAR, aldia);
-                                today.set(Calendar.HOUR_OF_DAY, alhora);
-                                today.set(Calendar.MINUTE, alminute);
-                                today.set(Calendar.SECOND, 0);
-
-                                SharedPreferences.Editor edit = settings.edit();
-                                edit.putString("hour", salhora);
-                                edit.putString("minute", salminute);
-
-                                //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
-                                edit.putInt("alarmID", alarmaidint);
-                                edit.putLong("alarmTime", today.getTimeInMillis());
-
-                                edit.commit();
 
                                 Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, (titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
 
-                                Utils.setAlarm(alarmaidint, today.getTimeInMillis(), NewTareaActivity.this);
                             }
 
                         }
@@ -260,7 +244,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 }
 
             });
-        }
+
     }
 
         //para introducir las fechas en la parte visual, dandole a los botones
