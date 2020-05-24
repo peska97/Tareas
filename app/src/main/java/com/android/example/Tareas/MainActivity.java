@@ -134,8 +134,12 @@ public class MainActivity extends AppCompatActivity {
                                                                 myTarea.getTitulo(), Toast.LENGTH_LONG).show();
                                                 //Eliminar tarea
                                                 mTareaViewModel.deleteTarea(myTarea);
-                                                //Elimina la alarma
-                                                //Utils.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()),MainActivity.this);
+                                                //Eliminar tarea
+                                                mTareaViewModel.deleteTarea(tareaPulsada);
+
+                                                GestionAlarmas.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()), MainActivity.this);
+                                                Toast.makeText(MainActivity.this,
+                                                        getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
                                             }
                                         })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -196,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                                     getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
                             //Eliminar todos los datos
                             mTareaViewModel.deleteAll();
+                            //Eliminar todas las tareas
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -294,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         } else if ( resultCode != RESULT_FIRST_USER) {
-            //Toast y vuelve a abrir la segunda actividad
             Toast.makeText(
                     this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
             //Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
@@ -319,6 +323,10 @@ public class MainActivity extends AppCompatActivity {
                                             tareaPulsada.getTitulo(), Toast.LENGTH_LONG).show();
                             //Eliminar tarea
                             mTareaViewModel.deleteTarea(tareaPulsada);
+
+                            GestionAlarmas.deleteAlarm(Integer.parseInt(tareaPulsada.getAlarmaid()), MainActivity.this);
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

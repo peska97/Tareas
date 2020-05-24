@@ -18,11 +18,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.example.Tareas.R;
 
@@ -64,10 +66,13 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonHorafin;
     private Button mBorrar;
     private TextView mTextAlarmaidView;
+    private ToggleButton alarmToggle;
 
-    //private int alarmID = 1;
+    private int alarmID = 1;
     private String contadoralarma;
     private int contadoralarmaint;
+
+    private boolean alarmaActivada;
 
     private TareaViewModel mTareaViewModel;
 
@@ -81,6 +86,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
         setContentView(R.layout.activity_new_tarea);
 
+        alarmaActivada= true;
+
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
         mTextFechaView = findViewById(R.id.fecha_creacion);
@@ -93,6 +100,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mButtonFechafin.setOnClickListener(this);
         mButtonHorafin.setOnClickListener(this);
         mTextAlarmaidView = findViewById(R.id.alarmaid_text);
+        alarmToggle = findViewById(R.id.alarmToggle);
 
 
         //creamos la fecha actual
@@ -181,26 +189,54 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
                             //cuando introduces un hora
                             if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
-                                //valores alarma
-                                String salanio, salmes, saldia, salhora, salminute;
+                                if (alarmaActivada == true) {
+                                    //valores alarma
+                                    String salanio, salmes, saldia, salhora, salminute;
 
-                                //salanio = fechafin.substring(6,10);
-                                //salmes = fechafin.substring(3,5);
-                                //saldia = fechafin.substring(0,2);
-                                salhora = horafin.substring(0, 2);
-                                salminute = horafin.substring(3, 5);
-                                //int alanio = Integer.parseInt(salanio);
-                                //int almes = Integer.parseInt(salmes);
-                                //int aldia = Integer.parseInt(saldia);
-                                int alhora = Integer.parseInt(salhora);
-                                int alminute = Integer.parseInt(salminute);
+                                    salanio = fechafin.substring(6, 10);
+                                    salmes = fechafin.substring(3, 5);
+                                    saldia = fechafin.substring(0, 2);
+                                    salhora = horafin.substring(0, 2);
+                                    salminute = horafin.substring(3, 5);
+                                    int alanio = Integer.parseInt(salanio);
+                                    int almes = Integer.parseInt(salmes);
+                                    int aldia = Integer.parseInt(saldia);
+                                    int alhora = Integer.parseInt(salhora);
+                                    int alminute = Integer.parseInt(salminute);
 
-                                //Alarma
+                                    Calendar today = Calendar.getInstance();
+                                    today.set(Calendar.YEAR, alanio);
+                                    today.set(Calendar.MONTH, almes);
+                                    today.set(Calendar.DAY_OF_MONTH, aldia);
+                                    today.set(Calendar.HOUR_OF_DAY, alhora);
+                                    today.set(Calendar.MINUTE, alminute);
+                                    today.set(Calendar.SECOND, 0);
 
-                                Toast.makeText(NewTareaActivity.this, getString(R.string.notificaciontoast, (titulo), salhora + ":" + salminute), Toast.LENGTH_LONG).show();
+                                    SharedPreferences.Editor edit = settings.edit();
+                                    edit.putString("year", salanio);
+                                    edit.putString("month", salmes);
+                                    edit.putString("day", saldia);
+                                    edit.putString("hour", salhora);
+                                    edit.putString("minute", salminute);
 
+                                    //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
+                                    edit.putInt("alarmID", alarmaidint);
+                                    edit.putLong("alarmTime", today.getTimeInMillis());
+
+                                    edit.commit();
+
+                                    Toast.makeText(NewTareaActivity.this, getString(R.string.changed_to, saldia + "/" + salmes + "/" + saldia + "-" + salhora + ":" + salminute), Toast.LENGTH_LONG).show();
+
+                                    //Alarma
+                                    GestionAlarmas.setAlarm(alarmaidint, today.getTimeInMillis(), NewTareaActivity.this);
+
+                                }
+                                else{
+                                    GestionAlarmas.deleteAlarm(alarmaidint, NewTareaActivity.this);
+                                    Toast.makeText(NewTareaActivity.this,
+                                            getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
+                                }
                             }
-
                         }
 
 
@@ -244,6 +280,20 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 }
 
             });
+
+            //cuando activas o desastivas la alarma con toggle
+        alarmToggle.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton,
+                                                 boolean isChecked) {
+                        if(isChecked){
+                            alarmaActivada = true;
+                        } else {
+                            alarmaActivada = false;
+                        }
+                    }
+                });
 
     }
 

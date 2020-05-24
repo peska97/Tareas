@@ -33,4 +33,6 @@
 
     <string name="new_notification">Tarea finalizada</string>
     <string name="notificaciontoast">Alarma creada</string>
+    <string name="changed_to">Alarma cambiada a las %s</string>
+    <string name="alarma_borrada_text">Alarma borrada</string>
 </resources>

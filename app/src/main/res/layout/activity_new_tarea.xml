@@ -96,15 +96,26 @@
         android:text="@string/text_finalizada"
         android:visibility="invisible"/>
 
-    <Button
-        android:id="@+id/button_save"
-        style="@style/button_style"
-        android:text="@string/button_save" />
+
+    <ToggleButton
+        android:id="@+id/alarmToggle"
+        style="@style/text_view_style"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:textOff="Alarma Activada"
+        android:textOn="Alarma Apagada"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/button_delete"
         style="@style/text_view_style3"
         android:text="@string/button_delete"
         android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/button_save"
+        style="@style/button_style"
+        android:text="@string/button_save" />
+
 
 </LinearLayout>

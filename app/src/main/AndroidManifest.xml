@@ -36,6 +36,22 @@
             android:value=".MainActivity"/>
         </activity>
 
+        <receiver
+            android:name="com.android.example.Tareas.AlarmReceiver"
+            android:enabled="true" />
+
+        <service
+            android:name="com.android.example.Tareas.NotificationService"
+            android:enabled="true" />
+
+        <!-- MAKE ALARMS RESTART ON REBOOT -->
+        <service android:name="com.com.android.example.Tareas.RebootServiceClass"/>
+        <receiver android:name="com.com.android.example.Tareas.MyRebootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
