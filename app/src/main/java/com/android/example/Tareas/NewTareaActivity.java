@@ -85,7 +85,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
         setContentView(R.layout.activity_new_tarea);
 
-
         settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 
         //valores para la alarmaid
@@ -215,17 +214,16 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                     int alminute = Integer.parseInt(salminute);
 
                                     Calendar today = Calendar.getInstance();
-                                    //today.set(Calendar.YEAR, alanio);
-                                    //today.set(Calendar.MONTH, almes);
-                                    //today.set(Calendar.DAY_OF_MONTH, aldia);
+                                    today.set(Calendar.YEAR, alanio);
+                                    today.set(Calendar.MONTH, almes);
+                                    today.set(Calendar.DAY_OF_MONTH, aldia);
                                     today.set(Calendar.HOUR_OF_DAY, alhora);
                                     today.set(Calendar.MINUTE, alminute);
                                     today.set(Calendar.SECOND, 0);
 
-                                    //SharedPreferences.Editor edit = settings.edit();
-                                    //edit.putString("year", salanio);
-                                    //edit.putString("month", salmes);
-                                    //edit.putString("day", saldia);
+                                    edit.putString("year", salanio);
+                                    edit.putString("month", salmes);
+                                    edit.putString("day", saldia);
                                     edit.putString("hour", salhora);
                                     edit.putString("minute", salminute);
 

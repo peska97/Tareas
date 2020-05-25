@@ -6,8 +6,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -50,14 +52,21 @@ public class MainActivity extends AppCompatActivity {
     public Tarea tareaPulsada;
     //deslizar hacia abajo
     SwipeRefreshLayout swipeRefreshLayout;
+    private SharedPreferences settings;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Poner el icono en accion Bar
+        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //actualizar lista al deslizar abajo
         swipeRefreshLayout =findViewById(R.id.swipeRefreshLayout);
@@ -122,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //para confirmar
                         AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
-                        alerta.setMessage("Desea borrar esta tarea?")
+                        alerta.setMessage(R.string.alertaborrar)
                                 .setCancelable(false)
                                 .setPositiveButton("Si", new DialogInterface.OnClickListener(){
 
@@ -139,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                                 //Eliminar alarma
                                                 GestionAlarmas.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()), MainActivity.this);
                                                 Toast.makeText(MainActivity.this,
-                                                        getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
+                                                        getString(R.string.tarea_borrada), Toast.LENGTH_LONG).show();
                                             }
                                         })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -198,9 +207,20 @@ public class MainActivity extends AppCompatActivity {
                             //toast
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
+                            //Eliminar todas las alarmas
+                            //pasamos el contador de alarmas
+                            int contid = settings.getInt("contadoralarmaid",0);
+                            for (int i = 0;i<contid;i++) {
+                                GestionAlarmas.deleteAlarm(i, MainActivity.this);
+                            }
+                            //borrar alarmas de ejemplo
+                            for (int i = -7;i<0;i++) {
+                                GestionAlarmas.deleteAlarm(i, MainActivity.this);
+                            }
+                            
+
                             //Eliminar todos los datos
                             mTareaViewModel.deleteAll();
-                            //Eliminar todas las alarmas
 
                         }
                     })
@@ -284,6 +304,13 @@ public class MainActivity extends AppCompatActivity {
                     data.getBooleanExtra(NewTareaActivity.EXTRA_ALARMAACTIVADA,false));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
+            //guarda valor de las tareas que se an creado
+            int cont = settings.getInt("contadoralarmaid", 0);
+            SharedPreferences.Editor edit = settings.edit();
+            cont++;
+            edit.putInt("contadoralarmaid",cont);
+            edit.commit();
+
         } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
             String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);

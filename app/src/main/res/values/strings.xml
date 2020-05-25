@@ -36,4 +36,6 @@
     <string name="changed_to">Alarma cambiada a las %s</string>
     <string name="alarma_borrada_text">Alarma borrada</string>
     <string name="Alarmaactivada">Alarma Activada</string>
+    <string name="tarea_borrada">Tarea borrada</string>
+    <string name="alertaborrar">Esta seguro que desea borrar la Tarea? Las alarmas asociadas a esta Tarea tambien se borraran</string>
 </resources>
