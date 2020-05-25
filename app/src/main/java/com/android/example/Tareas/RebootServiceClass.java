@@ -30,6 +30,8 @@ public class RebootServiceClass extends IntentService {
 
 
 
+    //cuado se reinicia y se llama
+    //crea las alarmas que habia antes
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         String intentType = intent.getExtras().getString("caller");

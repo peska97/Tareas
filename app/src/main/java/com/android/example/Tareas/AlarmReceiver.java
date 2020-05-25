@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-class AlarmReceiver extends BroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent service1 = new Intent(context, NotificationService.class);

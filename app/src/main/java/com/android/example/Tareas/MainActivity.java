@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_ID = "extra_data_id";
     public static final String EXTRA_TAREA = "extra_tarea";
     public static final String EXTRA_DATA_UPDATE_ALARMAID = "extra_alarmaid";
+    public static final String EXTRA_DATA_UPDATE_ALARMAACTIVADA = "extra_alarmaactivada";
     //para ordenar la lista
     public int mOrdenar;
     public Tarea tareaPulsada;
@@ -134,9 +135,8 @@ public class MainActivity extends AppCompatActivity {
                                                                 myTarea.getTitulo(), Toast.LENGTH_LONG).show();
                                                 //Eliminar tarea
                                                 mTareaViewModel.deleteTarea(myTarea);
-                                                //Eliminar tarea
-                                                mTareaViewModel.deleteTarea(tareaPulsada);
 
+                                                //Eliminar alarma
                                                 GestionAlarmas.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()), MainActivity.this);
                                                 Toast.makeText(MainActivity.this,
                                                         getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
@@ -200,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
                                     getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
                             //Eliminar todos los datos
                             mTareaViewModel.deleteAll();
-                            //Eliminar todas las tareas
+                            //Eliminar todas las alarmas
+
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -279,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                     data.getStringExtra(NewTareaActivity.EXTRA_FECHAFIN),
                     data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN),
                     data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false),
-                    data.getStringExtra(NewTareaActivity.EXTRA_ALARMAID));
+                    data.getStringExtra(NewTareaActivity.EXTRA_ALARMAID),
+                    data.getBooleanExtra(NewTareaActivity.EXTRA_ALARMAACTIVADA,false));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
         } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -290,9 +292,10 @@ public class MainActivity extends AppCompatActivity {
             String horafin = data.getStringExtra(NewTareaActivity.EXTRA_HORAFIN);
             Boolean finalizado = data.getBooleanExtra(NewTareaActivity.EXTRA_FINALIZADO, false);
             String alarmaid= data.getStringExtra(NewTareaActivity.EXTRA_ALARMAID);
+            Boolean alarmaactivada = data.getBooleanExtra(NewTareaActivity.EXTRA_ALARMAACTIVADA, false);
             int identificador = data.getIntExtra(NewTareaActivity.EXTRA_ID, -1);
             if (identificador != -1) {
-                mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado, alarmaid));
+                mTareaViewModel.update(new Tarea(identificador, titulo, descripcion, fecha, fechafin, horafin, finalizado, alarmaid, alarmaactivada));
             } else  {
                 Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
             }
@@ -325,8 +328,6 @@ public class MainActivity extends AppCompatActivity {
                             mTareaViewModel.deleteTarea(tareaPulsada);
 
                             GestionAlarmas.deleteAlarm(Integer.parseInt(tareaPulsada.getAlarmaid()), MainActivity.this);
-                            Toast.makeText(MainActivity.this,
-                                    getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -357,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DATA_UPDATE_HORAFIN, tarea.getHorafin());
         intent.putExtra(EXTRA_DATA_UPDATE_FINALIZADO, tarea.getFinalizado());
         intent.putExtra(EXTRA_DATA_UPDATE_ALARMAID, tarea.getAlarmaid());
+        intent.putExtra(EXTRA_DATA_UPDATE_ALARMAACTIVADA, tarea.getAlarmaactivada());
         intent.putExtra(EXTRA_TAREA, tarea.getClass());
         tareaPulsada = tarea;
         startActivityForResult(intent, UPDATE_TAREA_ACTIVITY_REQUEST_CODE);

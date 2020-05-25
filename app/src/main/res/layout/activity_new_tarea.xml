@@ -97,14 +97,11 @@
         android:visibility="invisible"/>
 
 
-    <ToggleButton
-        android:id="@+id/alarmToggle"
-        style="@style/text_view_style"
+    <CheckBox
+        android:id="@+id/chalarmaactivada"
         android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:textOff="Alarma Activada"
-        android:textOn="Alarma Apagada"
-        android:textSize="12sp" />
+        android:layout_height="wrap_content"
+        android:text="@string/Alarmaactivada"/>
 
     <Button
         android:id="@+id/button_delete"

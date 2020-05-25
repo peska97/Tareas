@@ -13,6 +13,7 @@ public class Tarea {
     @PrimaryKey(autoGenerate = true)
     private int identificador;
 
+
     @NonNull
     @ColumnInfo(name = "titulo")
     private String titulo;
@@ -35,8 +36,13 @@ public class Tarea {
     @ColumnInfo(name = "alarmaid")
     private String alarmaid;
 
+    @ColumnInfo(name = "alarmaactivada")
+    private Boolean alarmaactivada;
 
-    public Tarea(@NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, String alarmaid){
+
+
+
+    public Tarea(@NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, String alarmaid, Boolean alarmaactivada){
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -44,10 +50,11 @@ public class Tarea {
         this.horafin = horafin;
         this.finalizado = finalizado;
         this.alarmaid = alarmaid;
+        this.alarmaactivada = alarmaactivada;
     }
 
     @Ignore
-    public Tarea(int identificador, @NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, String alarmaid) {
+    public Tarea(int identificador, @NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, String alarmaid, Boolean alarmaactivada) {
         this.identificador = identificador;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -56,6 +63,7 @@ public class Tarea {
         this.horafin = horafin;
         this.finalizado = finalizado;
         this.alarmaid = alarmaid;
+        this.alarmaactivada = alarmaactivada;
     }
 
 
@@ -76,6 +84,7 @@ public class Tarea {
         return this.finalizado;
     }
     public String getAlarmaid() { return  this.alarmaid; }
+    public Boolean getAlarmaactivada() { return this.alarmaactivada; }
 
     public void setIdentificador(int identificador) {this.identificador = identificador;}
     public void setTitulo() { this.titulo = titulo; }
@@ -85,4 +94,5 @@ public class Tarea {
     public void setHorafin() {this.horafin = horafin; }
     public void setFinalizado() { this.finalizado = finalizado; }
     public void setAlarmaid() { this.alarmaid = alarmaid; }
+    public void alarmaActivada() { this.alarmaactivada = alarmaactivada; }
 }

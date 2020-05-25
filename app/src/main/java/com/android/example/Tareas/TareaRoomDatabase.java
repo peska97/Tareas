@@ -65,6 +65,7 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         private static String horafin = "00:00";
         private static Boolean finalizado = false;
         private static String[] alarmaid = {"-1","-2","-3","-4","-5","-6","-7"};
+        private static Boolean alarmafinalizada = false;
 
         PopulateDbAsync(TareaRoomDatabase db) {
             mDao = db.TareaDao();
@@ -75,7 +76,7 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
             //aqui se comprueba que la BBDD esta vacia
             if (mDao.getAnyTarea().length < 1) {
                 for (int i = 0; i <= titulos.length - 1; i++) {
-                    Tarea tarea = new Tarea(titulos[i], descripciones[i], fecha, fechafin, horafin, finalizado, alarmaid[i]);
+                    Tarea tarea = new Tarea(titulos[i], descripciones[i], fecha, fechafin, horafin, finalizado, alarmaid[i],alarmafinalizada);
                     mDao.insert(tarea);
                 }
             }

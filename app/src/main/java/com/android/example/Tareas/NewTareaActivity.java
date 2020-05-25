@@ -39,6 +39,7 @@ import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FECHAFIN
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_HORAFIN;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_FINALIZADO;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_TITULO;
+import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_ALARMAACTIVADA;
 
 
 public class NewTareaActivity extends AppCompatActivity implements View.OnClickListener {
@@ -51,6 +52,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     public static final String EXTRA_HORAFIN = "com.android.example.roomwordssample.HORAFIN";
     public static final String EXTRA_FINALIZADO = "com.android.example.roomwordssample.FINALIZADO";
     public static final String EXTRA_ALARMAID = "com.android.example.roomwordssample.ALARMAID";
+    public static final String EXTRA_ALARMAACTIVADA = "com.android.example.roomwordssample.ALARMAACTIVADA";
 
     private final static String CHANNEL_ID = "NOTIFICACIONES";
     private final static int NOTIFICACION_ID = 0;
@@ -66,18 +68,15 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonHorafin;
     private Button mBorrar;
     private TextView mTextAlarmaidView;
-    private ToggleButton alarmToggle;
+    private CheckBox mAlarmaactivada;
 
-    private int alarmID = 1;
-    private String contadoralarma;
-    private int contadoralarmaint;
-
-    private boolean alarmaActivada;
 
     private TareaViewModel mTareaViewModel;
 
     private String finalHour, finalMinute;
-    private SharedPreferences settings;
+    public SharedPreferences settings;
+    private int sharedalarmaid;
+    private String sharedalarmaids;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,11 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
         setContentView(R.layout.activity_new_tarea);
 
-        alarmaActivada= true;
+
+        settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        //valores para la alarmaid
+        sharedalarmaid = settings.getInt("alarmaid",0);
 
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
@@ -100,7 +103,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         mButtonFechafin.setOnClickListener(this);
         mButtonHorafin.setOnClickListener(this);
         mTextAlarmaidView = findViewById(R.id.alarmaid_text);
-        alarmToggle = findViewById(R.id.alarmToggle);
+        mAlarmaactivada = findViewById(R.id.chalarmaactivada);
 
 
         //creamos la fecha actual
@@ -117,25 +120,19 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
         //introducimos un nuevo alarmaid si no esta creado ya
         if (mTextAlarmaidView.isEnabled()) {
-            contadoralarma = String.valueOf(contadoralarmaint);
-            mTextAlarmaidView.setText(contadoralarma);
-            //para darle un valor diferente a la proxima alarma
-
+            sharedalarmaids = String.valueOf(sharedalarmaid);
+            mTextAlarmaidView.setText(sharedalarmaids);
         }
 
             //cuando accedas a la clase por medio de click en item
             final Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
-                String alarmaid = extras.getString(EXTRA_DATA_UPDATE_ALARMAID, "");
                 if (!titulo.isEmpty()) {
                     mEditTituloView.setText(titulo);
                     //hacer visible otras funciones
                     mFinalizado.setVisibility(View.VISIBLE);
                     mBorrar.setVisibility(View.VISIBLE);
-                    //mostrar id de alarma
-                    mTextAlarmaidView.setText(alarmaid);
-
                 }
                 String descripcion = extras.getString(EXTRA_DATA_UPDATE_DESCRIPCION, "");
                 if (!descripcion.isEmpty()) {
@@ -156,6 +153,14 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 Boolean finalizado = extras.getBoolean(EXTRA_DATA_UPDATE_FINALIZADO, false);
                 if (finalizado == true) {
                     mFinalizado.setChecked(true);
+                }
+                String alarmaid = extras.getString(EXTRA_DATA_UPDATE_ALARMAID, "");
+                if (!alarmaid.isEmpty()) {
+                    mTextAlarmaidView.setText(alarmaid);
+                }
+                Boolean alarmaactivada = extras.getBoolean(EXTRA_DATA_UPDATE_ALARMAACTIVADA, false);
+                if (alarmaactivada == true) {
+                    mAlarmaactivada.setChecked(true);
                 }
             }
 
@@ -180,16 +185,21 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         String alarmaid = mTextAlarmaidView.getText().toString();
                         Integer alarmaidint = Integer.parseInt(alarmaid);
                         Boolean finalizado = false;
+                        Boolean alarmaactivada = false;
 
-                        //para darle un valor diferente a la proxima alarma
-                        int cont = contadoralarmaint + 1;
-                        contadoralarmaint = cont;
+                        SharedPreferences.Editor edit = settings.edit();
+
+                        //damos otra valor a la id para crear la siguiente
+                        sharedalarmaid++;
+                        edit.putInt("alarmaid",sharedalarmaid);
+                        edit.commit();
 
                         //cuando introduces una fecha
                         if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
                             //cuando introduces un hora
                             if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
-                                if (alarmaActivada == true) {
+                                if (mAlarmaactivada.isChecked()) {
+                                    alarmaactivada = true;
                                     //valores alarma
                                     String salanio, salmes, saldia, salhora, salminute;
 
@@ -205,19 +215,21 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                     int alminute = Integer.parseInt(salminute);
 
                                     Calendar today = Calendar.getInstance();
-                                    today.set(Calendar.YEAR, alanio);
-                                    today.set(Calendar.MONTH, almes);
-                                    today.set(Calendar.DAY_OF_MONTH, aldia);
+                                    //today.set(Calendar.YEAR, alanio);
+                                    //today.set(Calendar.MONTH, almes);
+                                    //today.set(Calendar.DAY_OF_MONTH, aldia);
                                     today.set(Calendar.HOUR_OF_DAY, alhora);
                                     today.set(Calendar.MINUTE, alminute);
                                     today.set(Calendar.SECOND, 0);
 
-                                    SharedPreferences.Editor edit = settings.edit();
-                                    edit.putString("year", salanio);
-                                    edit.putString("month", salmes);
-                                    edit.putString("day", saldia);
+                                    //SharedPreferences.Editor edit = settings.edit();
+                                    //edit.putString("year", salanio);
+                                    //edit.putString("month", salmes);
+                                    //edit.putString("day", saldia);
                                     edit.putString("hour", salhora);
                                     edit.putString("minute", salminute);
+
+
 
                                     //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
                                     edit.putInt("alarmID", alarmaidint);
@@ -232,9 +244,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
                                 }
                                 else{
+                                    //si hay alguna alarma asociada se borrara
                                     GestionAlarmas.deleteAlarm(alarmaidint, NewTareaActivity.this);
-                                    Toast.makeText(NewTareaActivity.this,
-                                            getString(R.string.alarma_borrada_text), Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -251,6 +262,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         replyIntent.putExtra(EXTRA_HORAFIN, horafin);
                         replyIntent.putExtra(EXTRA_FINALIZADO, finalizado);
                         replyIntent.putExtra(EXTRA_ALARMAID, alarmaid);
+                        replyIntent.putExtra(EXTRA_ALARMAACTIVADA, alarmaactivada);
                         if (extras != null && extras.containsKey(EXTRA_DATA_ID)) {
                             int identificador = extras.getInt(EXTRA_DATA_ID, -1);
                             if (identificador != -1) {
@@ -281,19 +293,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
             });
 
-            //cuando activas o desastivas la alarma con toggle
-        alarmToggle.setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton,
-                                                 boolean isChecked) {
-                        if(isChecked){
-                            alarmaActivada = true;
-                        } else {
-                            alarmaActivada = false;
-                        }
-                    }
-                });
 
     }
 

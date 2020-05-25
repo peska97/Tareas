@@ -10,6 +10,8 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- MAKE ALARMS RESTART ON REBOOT -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -45,8 +47,8 @@
             android:enabled="true" />
 
         <!-- MAKE ALARMS RESTART ON REBOOT -->
-        <service android:name="com.com.android.example.Tareas.RebootServiceClass"/>
-        <receiver android:name="com.com.android.example.Tareas.MyRebootReceiver">
+        <service android:name="com.android.example.Tareas.RebootServiceClass"/>
+        <receiver android:name="com.android.example.Tareas.MyRebootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
