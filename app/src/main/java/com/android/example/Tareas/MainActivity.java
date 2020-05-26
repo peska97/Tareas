@@ -142,13 +142,12 @@ public class MainActivity extends AppCompatActivity {
                                                 Toast.makeText(MainActivity.this,
                                                         getString(R.string.delete_word_preamble) + " " +
                                                                 myTarea.getTitulo(), Toast.LENGTH_LONG).show();
-                                                //Eliminar tarea
-                                                mTareaViewModel.deleteTarea(myTarea);
 
                                                 //Eliminar alarma
                                                 GestionAlarmas.deleteAlarm(Integer.parseInt(myTarea.getAlarmaid()), MainActivity.this);
-                                                Toast.makeText(MainActivity.this,
-                                                        getString(R.string.tarea_borrada), Toast.LENGTH_LONG).show();
+
+                                                //Eliminar tarea
+                                                mTareaViewModel.deleteTarea(myTarea);
                                             }
                                         })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -354,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
                             //Eliminar tarea
                             mTareaViewModel.deleteTarea(tareaPulsada);
 
+                            //eliminar alarma
                             GestionAlarmas.deleteAlarm(Integer.parseInt(tareaPulsada.getAlarmaid()), MainActivity.this);
                         }
                     })
