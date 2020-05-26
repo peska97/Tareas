@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Poner el icono en accion Bar
+        //Poner el icono en action Bar
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //actualizar lista al deslizar abajo

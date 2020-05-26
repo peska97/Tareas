@@ -3,40 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.android.example.Tareas.MainActivity">
-    <item
-        android:id="@+id/clear_data"
-        android:orderInCategory="100"
-        android:title="@string/clear_all_data"
-        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/ordenar_alfabeticamente"
-        android:orderInCategory="100"
-        android:title="@string/alfabetic_ordenar"
-        app:showAsAction="never" />
+<item android:id="@+id/clear_data"
+    android:title="@string/clear_all_data"
+    app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/ordenar_fecha"
-        android:orderInCategory="100"
-        android:title="@string/fecha_ordenar"
-        app:showAsAction="never" />
+    <item android:id="@+id/filtrar_ordenar"
+        android:title="@string/text_filtrar_ordenar"
+        app:showAsAction="never">
+    <menu>
+        <item android:id="@+id/filtrar"
+            android:title="@string/text_filtrar"
+            app:showAsAction="never">
+            <menu>
+                <item android:id="@+id/filtrar_todas"
+                    android:title="@string/text_filtrar_todas"
+                    app:showAsAction="never"/>
+                <item android:id="@+id/filtrar_finalizado"
+                    android:title="@string/text_filtrar_finalizado"
+                    app:showAsAction="never"/>
+                <item android:id="@+id/filtrar_nofinalizado"
+                    android:title="@string/text_filtrar_nofinalizado"
+                    app:showAsAction="never"/>
+            </menu>
+        </item>
 
-    <item
-        android:id="@+id/filtrar_todas"
-        android:orderInCategory="100"
-        android:title="@string/text_filtrar_todas"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/filtrar_finalizado"
-        android:orderInCategory="100"
-        android:title="@string/text_filtrar_finalizado"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/filtrar_nofinalizado"
-        android:orderInCategory="100"
-        android:title="@string/text_filtrar_nofinalizado"
-        app:showAsAction="never" />
-
+        <item android:id="@+id/ordenar"
+            android:title="@string/text_ordenar"
+            app:showAsAction="never">
+            <menu>
+                <item android:id="@+id/ordenar_alfabeticamente"
+                    android:title="@string/alfabetic_ordenar"
+                    app:showAsAction="never"/>
+                <item android:id="@+id/ordenar_fecha"
+                    android:title="@string/fecha_ordenar"
+                    app:showAsAction="never"/>
+            </menu>
+        </item>
+    </menu>
+    </item>
 </menu>

@@ -38,4 +38,7 @@
     <string name="Alarmaactivada">Alarma Activada</string>
     <string name="tarea_borrada">Tarea borrada</string>
     <string name="alertaborrar">Esta seguro que desea borrar la Tarea? Las alarmas asociadas a esta Tarea tambien se borraran</string>
+    <string name="text_filtrar_ordenar">Ordenar o Filtar</string>
+    <string name="text_filtrar">Filtar</string>
+    <string name="text_ordenar">Ordenar</string>
 </resources>
