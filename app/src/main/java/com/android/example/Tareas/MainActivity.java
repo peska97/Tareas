@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_ALARMAID = "extra_alarmaid";
     public static final String EXTRA_DATA_UPDATE_ALARMAACTIVADA = "extra_alarmaactivada";
     //para ordenar la lista
-    public int mOrdenar;
+    public int mOrdenar=1;
     public Tarea tareaPulsada;
     //deslizar hacia abajo
     SwipeRefreshLayout swipeRefreshLayout;
@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onChanged(@Nullable final List<Tarea> tareas) {
                     //Actualiza las tareas en cache
                     adapter.setTareas(tareas);
+                    //actualiza la lista de tareas
+                    adaptador(mOrdenar);
                 }
             });
 
@@ -157,13 +159,14 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
+                                        //actualiza la lista de tareas
                                         adaptador(mOrdenar);
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
                         titulo.setTitle("Confirmar");
                         titulo.show();
-                        adaptador(mOrdenar);
+                        //adaptador(mOrdenar);
 
                     }
                 });
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.ordenar_alfabeticamente, Toast.LENGTH_LONG).show();
 
             //Cambiar valor de variable
-            mOrdenar = 0;
+            mOrdenar = 1;
             //llama al adaptador
             adaptador(mOrdenar);
 
@@ -278,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.ordenar_fecha, Toast.LENGTH_LONG).show();
 
             //Cambiar valor de variable
-            mOrdenar = 1;
+            mOrdenar = 2;
             //llama al adaptador
             adaptador(mOrdenar);
 
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.filtrar_finalizado){
             Toast.makeText(this, R.string.text_filtrarfin, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 2;
+            mOrdenar = 3;
             //llama al adaptador
             adaptador(mOrdenar);
         }
@@ -304,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.filtrar_nofinalizado){
             Toast.makeText(this, R.string.text_filtrarnofin, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 3;
+            mOrdenar = 4;
             //llama al adaptador
             adaptador(mOrdenar);
         }
@@ -396,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
             titulo.show();
 
         }
+
     }
 
 
@@ -437,18 +441,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        //ordenar por fecha
-        if (mOrdenar == 1) {
-            mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
-
-        }
         //ordenar alfabeticamente
-        if (mOrdenar == 0) {
+        if (mOrdenar == 1) {
             //observador, que actualiza los cambios cuando se producen
             //Obtiene todas las tareas de la BBDD y la asocia al adaptador
             mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
@@ -459,8 +453,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        //filtrar por finalizado
+
+        //ordenar por fecha
         if (mOrdenar == 2) {
+            mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    adapter.setTareas(tareas);
+                }
+            });
+
+        }
+        //filtrar por finalizado
+        if (mOrdenar == 3) {
             mTareaViewModel.getAllfinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
@@ -469,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         //filtrar por no finalizado
-        if (mOrdenar == 3) {
+        if (mOrdenar == 4) {
             mTareaViewModel.getAllnofinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
