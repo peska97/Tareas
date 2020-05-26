@@ -37,6 +37,10 @@ public interface TareaDao {
     //utilizamos liveData para responder a los cambios de los datos
     LiveData<List<Tarea>> getAllTareas();
 
+    //metodo para buscar tareas
+    @Query("SELECT * from tarea_table WHERE titulo LIKE 'E%' ORDER BY titulo ASC")
+    LiveData<List<Tarea>> getBuscarTareas();
+
     //metodo para ordenar por fecha
     @Query("SELECT * from tarea_table ORDER BY fechafin ASC")
     LiveData<List<Tarea>> getAllfechasTareas();

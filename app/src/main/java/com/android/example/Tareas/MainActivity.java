@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,9 +23,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -184,6 +187,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        //variables para buscar Tareas
+        final MenuItem searchItem = menu.findItem(R.id.buscar_tarea);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            //cuando introduzcas texto en el search
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Toast.makeText(MainActivity.this,newText,Toast.LENGTH_LONG).show();
+                mOrdenar = 0;
+                //llama al adaptador
+                adaptador(mOrdenar);
+
+                return true;
+            }
+        });
         return true;
     }
 
@@ -401,6 +426,16 @@ public class MainActivity extends AppCompatActivity {
 
         //lo utilizamos para que cuando se destruya la actividad, no se borre
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
+
+        //buscar tarea
+        if (mOrdenar == 0) {
+            mTareaViewModel.getBuscarTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    adapter.setTareas(tareas);
+                }
+            });
+        }
 
         //ordenar por fecha
         if (mOrdenar == 1) {

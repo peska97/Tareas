@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/home/peska/android-studio-ide-192.6241897-linux/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_filter_frames_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/home/peska/android-studio-ide-192.6241897-linux/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,7 +45,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_filtrar" />
+                                      <entry key="outputName" value="ic_menu_seach" />
                                       <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>

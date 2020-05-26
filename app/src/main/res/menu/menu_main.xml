@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.android.example.Tareas.MainActivity">
 
+    <item android:id="@+id/buscar_tarea"
+        android:title="Buscar Tarea"
+        android:icon="@drawable/ic_menu_seach"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+
     <item android:id="@+id/filtrar_ordenar"
         android:icon="@drawable/ic_action_filtrar"
         android:title="@string/text_filtrar_ordenar"
