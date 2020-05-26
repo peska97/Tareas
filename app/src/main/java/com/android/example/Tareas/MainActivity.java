@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Poner el icono en accion Bar
-        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //actualizar lista al deslizar abajo
         swipeRefreshLayout =findViewById(R.id.swipeRefreshLayout);
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                             for (int i = -7;i<0;i++) {
                                 GestionAlarmas.deleteAlarm(i, MainActivity.this);
                             }
-                            
+
 
                             //Eliminar todos los datos
                             mTareaViewModel.deleteAll();

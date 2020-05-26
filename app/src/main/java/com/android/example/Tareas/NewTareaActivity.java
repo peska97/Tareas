@@ -28,6 +28,7 @@ import android.widget.ToggleButton;
 
 import com.android.example.Tareas.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -73,7 +74,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
     private TareaViewModel mTareaViewModel;
 
-    private String finalHour, finalMinute;
+    //private String finalHour, finalMinute;
     public SharedPreferences settings;
     private int sharedalarmaid;
     private String sharedalarmaids;
@@ -109,9 +110,14 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         final Calendar c = Calendar.getInstance();
         int anio = c.get(Calendar.YEAR);
         int mes = c.get(Calendar.MONTH);
-        int mescorrecto = mes + 1;
+        mes = mes + 1;
         int dia = c.get(Calendar.DAY_OF_MONTH);
-        String fechacompleta = (dia + " / " + mescorrecto + " / " + anio);
+        String mesconcero = ""+mes;
+        String diaconcero = ""+dia;
+        if (mes < 10) mesconcero = "0"+mes;
+        if (dia < 10) diaconcero = "0"+dia;
+
+        final String fechacompleta = (diaconcero + "/" + mesconcero + "/" + anio);
         //introducimos la fecha actual
         if (mTextFechaView.isEnabled()) {
             mTextFechaView.setText(fechacompleta);
@@ -214,12 +220,17 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                     int alminute = Integer.parseInt(salminute);
 
                                     Calendar today = Calendar.getInstance();
-                                    today.set(Calendar.YEAR, alanio);
-                                    today.set(Calendar.MONTH, almes);
-                                    today.set(Calendar.DAY_OF_MONTH, aldia);
-                                    today.set(Calendar.HOUR_OF_DAY, alhora);
-                                    today.set(Calendar.MINUTE, alminute);
-                                    today.set(Calendar.SECOND, 0);
+                                    //si la fecha no es la de hoy tambien pasa la fecha
+                                    if (!fechafin.equals(fechacompleta)) {
+                                        today.set(Calendar.YEAR, alanio);
+                                        today.set(Calendar.MONTH, almes);
+                                        today.set(Calendar.DAY_OF_MONTH, aldia);
+                                    }
+                                        today.set(Calendar.HOUR_OF_DAY, alhora);
+                                        today.set(Calendar.MINUTE, alminute);
+                                        today.set(Calendar.SECOND, 0);
+
+
 
                                     edit.putString("year", salanio);
                                     edit.putString("month", salmes);
@@ -318,7 +329,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
 
                     }
-                }, diafin, mesfin, aniofin);
+                }, aniofin, mesfin, diafin);
                 datePickerDialog.show();
 
             }

@@ -8,6 +8,7 @@
     <color name="colorTextPrimary">@android:color/white</color>
     <color name="colorScreenBackground">#fff3e0</color>
     <color name="colorTextHint">#E0E0E0</color>
+    <color name="tarea_finalizada">#F44336</color>
 
     <color name="button_red">#F44336</color>
     <color name="button_black">#000000</color>
