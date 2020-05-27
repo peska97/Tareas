@@ -1,4 +1,3 @@
-
 package com.android.example.Tareas;
 
 import android.content.Context;
@@ -7,14 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
 
 //adaptador
 public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.TareaViewHolder> {
 
     private final LayoutInflater mInflater;
-    private List<Tarea> Tareas; // Cached copy of words
+    private List<Tarea> Tareas;
     //click en item
     private static ClickListener clickListener;
     private Boolean fin = false;
@@ -51,8 +49,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
             Tarea current = Tareas.get(position);
             holder.tareaItemView.setText(current.getTitulo());
         } else {
-            // Covers the case of data not being ready yet.
-            // holder.wordItemView.setText("No Tarea");
+            // Por si los datos no estan listos
             holder.tareaItemView.setText(R.string.no_tarea);
         }
     }

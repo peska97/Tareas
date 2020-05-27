@@ -15,6 +15,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
+//crea la notificacion, con todos sus atributos
 public class NotificationService extends IntentService {
 
     private NotificationManager notificationManager;
@@ -42,6 +43,7 @@ public class NotificationService extends IntentService {
 
         String message = getString(R.string.new_notification);
 
+        //Nos aseguramos que la version sdk es la correcta
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final int NOTIFY_ID = 0; // ID of notification
             String id = NOTIFICATION_CHANNEL_ID; // default_channel_id
@@ -79,6 +81,7 @@ public class NotificationService extends IntentService {
             startForeground(1, notification);
 
         } else {
+            //en esta version no hace falta crear un canal de notificaciones
             pendingIntent = PendingIntent.getActivity(context, 1, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification = new NotificationCompat.Builder(this)
                     .setContentIntent(pendingIntent)

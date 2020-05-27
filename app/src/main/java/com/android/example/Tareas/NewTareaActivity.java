@@ -1,37 +1,26 @@
 package com.android.example.Tareas;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import com.android.example.Tareas.R;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
+//importa de la actividad principal
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_ID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_ALARMAID;
 import static com.android.example.Tareas.MainActivity.EXTRA_DATA_UPDATE_DESCRIPCION;
@@ -55,9 +44,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     public static final String EXTRA_ALARMAID = "com.android.example.roomwordssample.ALARMAID";
     public static final String EXTRA_ALARMAACTIVADA = "com.android.example.roomwordssample.ALARMAACTIVADA";
 
-    private final static String CHANNEL_ID = "NOTIFICACIONES";
-    private final static int NOTIFICACION_ID = 0;
-
 
     private EditText mEditTituloView;
     private EditText mEditDescripcionView;
@@ -74,7 +60,6 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
     private TareaViewModel mTareaViewModel;
 
-    //private String finalHour, finalMinute;
     public SharedPreferences settings;
     private int sharedalarmaid;
     private String sharedalarmaids;
@@ -82,15 +67,15 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //lo utilizamos para que cuando se destruya la actividad, no se borre
+        //lo utilizamos para que cuando se destruya la actividad no se borre
         mTareaViewModel = ViewModelProviders.of(this).get(TareaViewModel.class);
         setContentView(R.layout.activity_new_tarea);
 
         settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-
         //valores para la alarmaid
-        sharedalarmaid = settings.getInt("alarmaid",0);
+        sharedalarmaid = settings.getInt("contadoralarmaid",0);
 
+        //asociamos todas las variables con la parte visual
         mEditTituloView = findViewById(R.id.edit_titulo);
         mEditDescripcionView = findViewById(R.id.edit_descripcion);
         mTextFechaView = findViewById(R.id.fecha_creacion);
@@ -130,6 +115,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
         }
 
             //cuando accedas a la clase por medio de click en item
+        //introduce todos los datos en la parte visual
             final Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 String titulo = extras.getString(EXTRA_DATA_UPDATE_TITULO, "");
@@ -181,7 +167,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                     if (TextUtils.isEmpty(mEditTituloView.getText())) {
                         setResult(RESULT_CANCELED, replyIntent);
                     } else {
-                        // Obtenga el nuevo titulo y descripcion que ingresó el usuario.
+                        // Obtenr los nuevos datos introducidos
                         String titulo = mEditTituloView.getText().toString();
                         String descripcion = mEditDescripcionView.getText().toString();
                         String fecha = mTextFechaView.getText().toString();
@@ -191,18 +177,18 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         Integer alarmaidint = Integer.parseInt(alarmaid);
                         Boolean finalizado = false;
                         Boolean alarmaactivada = false;
+                        if (mFinalizado.isChecked()) {
+                            finalizado = true;
+                        }
 
+                        //Alarma
                         SharedPreferences.Editor edit = settings.edit();
-
-                        //damos otra valor a la id para crear la siguiente
-                        sharedalarmaid++;
-                        edit.putInt("alarmaid",sharedalarmaid);
-                        edit.commit();
 
                         //cuando introduces una fecha
                         if (!TextUtils.isEmpty(mTextFechafinView.getText())) {
                             //cuando introduces un hora
                             if (!TextUtils.isEmpty(mTextHorafinView.getText())) {
+                                //si la alarma esta activada
                                 if (mAlarmaactivada.isChecked()) {
                                     alarmaactivada = true;
                                     //valores alarma
@@ -240,7 +226,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-                                    //SAVE ALARM TIME TO USE IT IN CASE OF REBOOT
+                                    //PARA REINICIO
                                     edit.putInt("alarmID", alarmaidint);
                                     edit.putLong("alarmTime", today.getTimeInMillis());
 
@@ -248,10 +234,11 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
                                     Toast.makeText(NewTareaActivity.this, getString(R.string.changed_to, saldia + "/" + salmes + "/" + saldia + "-" + salhora + ":" + salminute), Toast.LENGTH_LONG).show();
 
-                                    //Alarma
+                                    //Creamos la Alarma
                                     GestionAlarmas.setAlarm(alarmaidint, today.getTimeInMillis(), NewTareaActivity.this);
 
                                 }
+                                //si la alarma esta desactivada
                                 else{
                                     //si hay alguna alarma asociada se borrara
                                     GestionAlarmas.deleteAlarm(alarmaidint, NewTareaActivity.this);
@@ -260,10 +247,7 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                         }
 
 
-                        if (mFinalizado.isChecked()) {
-                            finalizado = true;
-                        }
-                        // Pon el nuevo titulo en los extras para la respuesta Intención.
+                        // Pon los valores en los extras para utilizarlos en MainActiviti
                         replyIntent.putExtra(EXTRA_TITULO, titulo);
                         replyIntent.putExtra(EXTRA_DESCRIPCION, descripcion);
                         replyIntent.putExtra(EXTRA_FECHA, fecha);
@@ -293,10 +277,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
 
                 public void onClick(View view) {
 
-
                     // Envia el result para acceder borrar la tarea
                     setResult(RESULT_FIRST_USER);
-
                     finish();
                 }
 
@@ -306,16 +288,16 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
     }
 
         //para introducir las fechas en la parte visual, dandole a los botones
-
-
     @Override
     public void onClick(View v){
+        //Fecha
             if (v == mButtonFechafin) {
                 final Calendar cf = Calendar.getInstance();
                 int diafin = cf.get(Calendar.DAY_OF_MONTH);
                 int mesfin = cf.get(Calendar.MONTH);
                 int aniofin = cf.get(Calendar.YEAR);
 
+                //DatePicker para introducir la fecha
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -333,12 +315,13 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                 datePickerDialog.show();
 
             }
+            //Hora
             if (v == mButtonHorafin) {
                 final Calendar cf = Calendar.getInstance();
                 int horafin = cf.get(Calendar.HOUR_OF_DAY);
                 int minutosfin = cf.get(Calendar.MINUTE);
 
-
+                //TimePicker para introducir la hora
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @SuppressLint("StringFormatInvalid")
                     @Override

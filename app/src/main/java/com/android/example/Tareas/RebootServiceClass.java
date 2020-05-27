@@ -9,12 +9,9 @@ import android.support.annotation.Nullable;
 
 public class RebootServiceClass extends IntentService {
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
+    //Crea un IntentService. Invocado por el constructor de tu subclase.
     public RebootServiceClass(String name) {
+        //name se usa para nombrar el subproceso de trabajo, importante solo para la depuración.
         super(name);
         startForeground(1, new Notification());
     }

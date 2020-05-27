@@ -3,7 +3,6 @@ package com.android.example.Tareas;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-
 import java.util.List;
 
 public class TareaRepository {
@@ -54,15 +53,13 @@ public class TareaRepository {
 
     public void update(Tarea tarea) {new updateTareasAsyncTask(mTareaDao).execute(tarea);}
 
-    // Need to run off main thread
     public void deleteTarea(Tarea tarea) {
         new deleteTareaAsyncTask(mTareaDao).execute(tarea);
     }
 
 
 
-    // Static inner classes below here to run database interactions
-    // in the background.
+    // Interacciones a la base de datos
 
     //Introduce tareas a la BBDD
     private static class insertAsyncTask extends AsyncTask<Tarea, Void, Void> {

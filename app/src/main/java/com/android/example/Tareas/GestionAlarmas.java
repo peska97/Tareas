@@ -10,6 +10,7 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class GestionAlarmas {
 
+    //inserta una nueva alarma con un id y un tiempo
     public static void setAlarm(int i, Long timestamp, Context ctx) {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(ctx, AlarmReceiver.class);
@@ -19,6 +20,7 @@ public class GestionAlarmas {
         alarmManager.set(AlarmManager.RTC_WAKEUP, timestamp, pendingIntent);
     }
 
+    //borra la alarma con un id
     public static void deleteAlarm(int i, Context ctx) {
         Intent alarmIntent = new Intent(ctx, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, i, alarmIntent, PendingIntent.FLAG_ONE_SHOT);

@@ -1,20 +1,15 @@
 package com.android.example.Tareas;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,23 +17,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 import java.util.List;
+
+import static com.android.example.Tareas.R.string.text_mostrartodas;
 
 public class MainActivity extends AppCompatActivity {
     //var para todas las interacciones de la actividad
     private TareaViewModel mTareaViewModel;
 
-    public static final int NEW_TAREA_ACTIVITY_REQUEST_CODE = 1;
-
     //click en item
+    public static final int NEW_TAREA_ACTIVITY_REQUEST_CODE = 1;
     public static final int UPDATE_TAREA_ACTIVITY_REQUEST_CODE = 2;
     public static final String EXTRA_DATA_UPDATE_TITULO = "extra_data_update_titulo";
     public static final String EXTRA_DATA_UPDATE_DESCRIPCION = "extra_data_update_descripcion";
@@ -52,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_ALARMAACTIVADA = "extra_alarmaactivada";
     //para ordenar la lista
     public int mOrdenar=1;
+    //tarea que se pulsa
     public Tarea tareaPulsada;
     //deslizar hacia abajo
     SwipeRefreshLayout swipeRefreshLayout;
+
     private SharedPreferences settings;
 
 
@@ -77,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 //llama al adaptador
+                mOrdenar = 1;
                 adaptador(mOrdenar);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        //RecyclerView que llama al adaptador
+        //RecyclerView donde vamos a poner la lista de tareas
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final TareaListAdapter adapter = new TareaListAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -109,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //al dar clic en FAB llama a la clase para crear otra palabra
+                //al dar clic en FAB llama a la clase para crear otra tarea
                 Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
                 startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
             }
@@ -138,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
                         alerta.setMessage(R.string.alertaborrar)
                                 .setCancelable(false)
-                                .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+                                .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener(){
 
+                                    //si
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                //cuando le dices que si
                                                 //toast
                                                 Toast.makeText(MainActivity.this,
                                                         getString(R.string.delete_word_preamble) + " " +
@@ -155,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
                                                 mTareaViewModel.deleteTarea(myTarea);
                                             }
                                         })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                                    //no
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
@@ -164,13 +161,11 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
-                        titulo.setTitle("Confirmar");
+                        titulo.setTitle(R.string.text_alerd_borrar);
                         titulo.show();
-                        //adaptador(mOrdenar);
 
                     }
                 });
-        // Attach the item touch helper to the recycler view
         helper.attachToRecyclerView(recyclerView);
 
         //click en item
@@ -204,13 +199,21 @@ public class MainActivity extends AppCompatActivity {
             //cuando introduzcas texto en el search
             @Override
             public boolean onQueryTextChange(String newText) {
+                //comprobar con un toast lo que estas escribiendo
                 Toast.makeText(MainActivity.this,newText,Toast.LENGTH_LONG).show();
+                //cambiamos el valor para acceder a buscartarea
                 mOrdenar = 0;
+                //pasamos la parlabra buscar con el SharedPreferences
+                SharedPreferences.Editor edit = settings.edit();
+                edit.putString("buscartarea",newText);
+                edit.commit();
+
                 //llama al adaptador
                 adaptador(mOrdenar);
 
                 return true;
             }
+
         });
         return true;
     }
@@ -224,19 +227,17 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.clear_data) {
             //para confirmar
             AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
-            alerta.setMessage("Desea borrar todas las tareas?")
+            alerta.setMessage(R.string.alertaborrartodas)
                     .setCancelable(false)
-                    .setPositiveButton("Si", new DialogInterface.OnClickListener(){
-
+                    .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener(){
+                        //si
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //cuando le dices que si
-                            //toast
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.clear_data_toast_text), Toast.LENGTH_LONG).show();
-                            //Eliminar todas las alarmas
-                            //pasamos el contador de alarmas
+                            //pasamos el contador de alarmas, con el SharedPreferences
                             int contid = settings.getInt("contadoralarmaid",0);
+                            //Eliminar todas las alarmas
                             for (int i = 0;i<contid;i++) {
                                 GestionAlarmas.deleteAlarm(i, MainActivity.this);
                             }
@@ -245,6 +246,11 @@ public class MainActivity extends AppCompatActivity {
                                 GestionAlarmas.deleteAlarm(i, MainActivity.this);
                             }
 
+                            //reiniciamos el contador del contadoralaraid
+                            SharedPreferences.Editor edit = settings.edit();
+                            contid=0;
+                            edit.putInt("contadoralarmaid",contid);
+                            edit.commit();
 
                             //Eliminar todos los datos
                             mTareaViewModel.deleteAll();
@@ -258,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             AlertDialog titulo = alerta.create();
-            titulo.setTitle("Confirmar");
+            titulo.setTitle(R.string.text_alerd_borrar);
             titulo.show();
 
             return true;
@@ -289,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //filtrar todas
         if (id == R.id.filtrar_todas){
-            Toast.makeText(this, R.string.text_mostrartodas, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, text_mostrartodas, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
             mOrdenar = 1;
             //llama al adaptador
@@ -319,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult( int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //introduce una nueva tarea
         if (requestCode == NEW_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Tarea tarea = new Tarea(
                     data.getStringExtra(NewTareaActivity.EXTRA_TITULO),
@@ -331,13 +338,14 @@ public class MainActivity extends AppCompatActivity {
                     data.getBooleanExtra(NewTareaActivity.EXTRA_ALARMAACTIVADA,false));
             //Guarda los datos
             mTareaViewModel.insert(tarea);
-            //guarda valor de las tareas que se an creado
+            //suma uno al contador de alarmas con SharedPreferences
             int cont = settings.getInt("contadoralarmaid", 0);
             SharedPreferences.Editor edit = settings.edit();
             cont++;
             edit.putInt("contadoralarmaid",cont);
             edit.commit();
 
+            //actualiza la tarea
         } else if (requestCode == UPDATE_TAREA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String titulo = data.getStringExtra(NewTareaActivity.EXTRA_TITULO);
             String descripcion = data.getStringExtra(NewTareaActivity.EXTRA_DESCRIPCION);
@@ -354,48 +362,44 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "No actualizado", Toast.LENGTH_LONG).show();
             }
 
-
+            //cuando la tarea no se guarda
         } else if ( resultCode != RESULT_FIRST_USER) {
             Toast.makeText(
                     this, R.string.empty_not_saved, Toast.LENGTH_LONG).show();
-            //Intent intent = new Intent(MainActivity.this, NewTareaActivity.class);
-            //startActivityForResult(intent, NEW_TAREA_ACTIVITY_REQUEST_CODE);
         }
 
-        //boton borrar
+        //click en boton borrar
         if ( resultCode == RESULT_FIRST_USER) {
 
             //para confirmar
             AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
             alerta.setMessage("Desea borrar la tarea:"+tareaPulsada.getTitulo())
                     .setCancelable(false)
+                    //si
                     .setPositiveButton("Si", new DialogInterface.OnClickListener(){
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //cuando le dices que si
-                            //toast
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.delete_word_preamble) + " " +
                                             tareaPulsada.getTitulo(), Toast.LENGTH_LONG).show();
-                            //Eliminar tarea
-                            mTareaViewModel.deleteTarea(tareaPulsada);
-
                             //eliminar alarma
                             GestionAlarmas.deleteAlarm(Integer.parseInt(tareaPulsada.getAlarmaid()), MainActivity.this);
+                            //Eliminar tarea
+                            mTareaViewModel.deleteTarea(tareaPulsada);
                         }
                     })
+                    //no
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            //cuando le dices que no
                             //vuelve a abrir la tarea que no quieres borrar
                             clickenitem(tareaPulsada);
                         }
                     });
             AlertDialog titulo = alerta.create();
-            titulo.setTitle("Confirmar");
+            titulo.setTitle(R.string.text_alerd_borrar);
             titulo.show();
 
         }
@@ -403,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //click en item
+    //click en item, pasa los atributoas a la segunda actividad
     public void clickenitem(Tarea tarea) {
         Intent intent = new Intent(this, NewTareaActivity.class);
         intent.putExtra(EXTRA_DATA_ID, tarea.getIdentificador());
@@ -433,22 +437,25 @@ public class MainActivity extends AppCompatActivity {
 
         //buscar tarea
         if (mOrdenar == 0) {
+            //obtenemos la variable a buscar con el SharedPreferences
+            final String tareabuscar = settings.getString("buscartarea","");
+            //llama al dao para hacer la consulta en la BBDD
             mTareaViewModel.getBuscarTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
                     adapter.setTareas(tareas);
+
+
+
                 }
             });
         }
 
         //ordenar alfabeticamente
         if (mOrdenar == 1) {
-            //observador, que actualiza los cambios cuando se producen
-            //Obtiene todas las tareas de la BBDD y la asocia al adaptador
             mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
-                    //Actualiza las tareas en cache
                     adapter.setTareas(tareas);
                 }
             });

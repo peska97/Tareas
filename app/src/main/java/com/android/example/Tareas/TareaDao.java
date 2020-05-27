@@ -7,14 +7,13 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-
 import java.util.List;
 
 @Dao
 public interface TareaDao {
 
-    //metodo para insertar palabra
-    //ignora que introduzcas otra palabra igual, ya que las palabras son clave
+    //metodo para insertar Tareas
+    //ignora que introduzcas otro titulo igual, ya que los titulos son clave
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Tarea tarea);
 

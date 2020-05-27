@@ -3,9 +3,7 @@ package com.android.example.Tareas;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-
 import java.util.List;
-
 
 //clase cuyo papel es proporcionar datos a la interfaz de usuario y sobrevivir a los cambios de configuración, actua como un centro de comunicacion entre el repositorio y la interfaz de usuario
 public class TareaViewModel extends AndroidViewModel {
