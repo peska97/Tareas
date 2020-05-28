@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Poner el icono en action Bar
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher_recortado);
 
         //actualizar lista al deslizar abajo
         swipeRefreshLayout =findViewById(R.id.swipeRefreshLayout);
