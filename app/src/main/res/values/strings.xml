@@ -45,4 +45,6 @@
     <string name="confirmar">Yes</string>
     <string name="cancelar">No</string>
     <string name="text_alerd_borrar">Confirm</string>
+    <string name="night_mode">Night mode</string>
+    <string name="day_mode">Day mode</string>
 </resources>

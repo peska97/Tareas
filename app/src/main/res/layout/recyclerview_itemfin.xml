@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/text_view_style3"
+        style="@style/button_view_style_red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="8dp"

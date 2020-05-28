@@ -1,7 +1,7 @@
 
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -13,9 +13,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    </style>
 
     <style name="text_view_style">
         <item name="android:layout_width">match_parent</item>
@@ -28,34 +30,26 @@
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
-    <style name="text_view_style2">
+    <style name="button_view_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:padding">6dp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
-    <style name="button_style" parent="android:style/Widget.Material.Button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/colorPrimaryDark</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:textColor">@color/colorTextPrimary</item>
-    </style>
-    <style name="text_view_style3">
+    <style name="button_view_style_red">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
-        <item name="android:background">@color/tarea_finalizada</item>
+        <item name="android:background">@color/colorRed</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:padding">16dp</item>
-        <item name="android:textColor">@color/button_black</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 </resources>
 

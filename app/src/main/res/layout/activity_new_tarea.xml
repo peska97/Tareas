@@ -35,12 +35,12 @@
 
         <Button
             android:id="@+id/button_fecha"
-            style="@style/text_view_style2"
+            style="@style/button_view_style"
             android:text="@string/button_fecha" />
 
         <EditText
             android:id="@+id/fecha_fin"
-            style="@style/text_view_style2"
+            style="@style/text_view_style"
             android:layout_marginStart="5dp"
             android:hint="@string/hint_fechafin"
             android:inputType="textAutoComplete"
@@ -55,12 +55,12 @@
 
         <Button
             android:id="@+id/button_hora"
-            style="@style/text_view_style2"
+            style="@style/button_view_style"
             android:text="@string/button_hora" />
 
         <EditText
             android:id="@+id/hora_fin"
-            style="@style/text_view_style2"
+            style="@style/text_view_style"
             android:layout_marginStart="5dp"
             android:hint="@string/hint_horafin"
             android:inputType="textAutoComplete"
@@ -106,13 +106,12 @@
 
     <Button
         android:id="@+id/button_delete"
-        style="@style/text_view_style3"
-        android:text="@string/button_delete"
-        android:visibility="invisible"/>
+        style="@style/button_view_style_red"
+        android:text="@string/button_delete" />
 
     <Button
         android:id="@+id/button_save"
-        style="@style/button_style"
+        style="@style/button_view_style"
         android:text="@string/button_save" />
 
 

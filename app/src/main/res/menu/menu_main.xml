@@ -48,4 +48,7 @@
     <item android:id="@+id/clear_data"
         android:title="@string/clear_all_data"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/night_mode"
+        android:title="@string/night_mode"/>
 </menu>
