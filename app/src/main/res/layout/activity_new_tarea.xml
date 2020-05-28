@@ -107,7 +107,8 @@
     <Button
         android:id="@+id/button_delete"
         style="@style/button_view_style_red"
-        android:text="@string/button_delete" />
+        android:text="@string/button_delete"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/button_save"

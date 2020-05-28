@@ -276,14 +276,11 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
             buttondelete.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View view) {
-
-                    // Envia el result para acceder borrar la tarea
-                    setResult(RESULT_FIRST_USER);
-                    finish();
+                        // Envia el result para acceder borrar la tarea
+                        setResult(RESULT_FIRST_USER);
+                        finish();
                 }
-
             });
-
 
     }
 
