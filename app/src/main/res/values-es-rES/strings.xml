@@ -30,6 +30,7 @@
     <string name="text_mostrartodas">Todas las Tareas</string>
     <string name="text_filtrarfin">Finalizadas</string>
     <string name="text_filtrarnofin">No finalizadas</string>
+    <string name="text_filtrar_alarma">Alarma activada</string>
 
     <string name="new_notification">Tarea finalizada</string>
     <string name="notificaciontoast">Alarma creada</string>

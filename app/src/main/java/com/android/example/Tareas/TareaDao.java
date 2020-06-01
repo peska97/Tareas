@@ -47,6 +47,10 @@ public interface TareaDao {
     @Query("SELECT * from tarea_table WHERE not finalizado")
     LiveData<List<Tarea>> getAllnofinalizadoTareas();
 
+    //metodo para filtrar por alarmas activadas
+    @Query("SELECT * from tarea_table WHERE  alarmaactivada")
+    LiveData<List<Tarea>> getAllAlarmaTareas();
+
     //metodo para actualizar tareas
     @Update
     void update(Tarea... tarea);

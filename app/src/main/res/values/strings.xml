@@ -30,6 +30,7 @@
     <string name="text_mostrartodas">All tasks</string>
     <string name="text_filtrarfin">Finished</string>
     <string name="text_filtrarnofin">Not finished</string>
+    <string name="text_filtrar_alarma">Alarm activated</string>
 
     <string name="new_notification">Finished work</string>
     <string name="notificaciontoast">Alarm created</string>

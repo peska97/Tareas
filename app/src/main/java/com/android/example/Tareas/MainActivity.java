@@ -212,8 +212,6 @@ public class MainActivity extends AppCompatActivity {
             //cuando introduzcas texto en el search
             @Override
             public boolean onQueryTextChange(String newText) {
-                //comprobar con un toast lo que estas escribiendo
-                Toast.makeText(MainActivity.this,newText,Toast.LENGTH_LONG).show();
 
                 //cambiamos el valor para acceder a buscartarea
                 mOrdenar = 0;
@@ -323,6 +321,14 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.text_filtrarnofin, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
             mOrdenar = 4;
+            //llama al adaptador
+            adaptador(mOrdenar,"");
+        }
+        //filtrar por alarma activada
+        if (id == R.id.filtrar_alarma){
+            Toast.makeText(this, R.string.text_filtrar_alarma, Toast.LENGTH_LONG).show();
+            //Cambiar valor de variable
+            mOrdenar = 5;
             //llama al adaptador
             adaptador(mOrdenar,"");
         }
@@ -510,6 +516,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        //filtrar por alarma activada
+        if (mOrdenar == 5) {
+            mTareaViewModel.getAllAlarmaTareas().observe(this, new Observer<List<Tarea>>() {
+                @Override
+                public void onChanged(@Nullable final List<Tarea> tareas) {
+                    adapter.setTareas(tareas);
+                }
+            });
+        }
     }
 
     //filtrar para buscar tareas
@@ -519,6 +534,7 @@ public class MainActivity extends AppCompatActivity {
             texto = texto.toLowerCase();
             for(Tarea tare: tarea){
                 String tarea2=tare.getTitulo().toLowerCase();
+                //si el titulo de la tarea contiene el texto, se añade a la nueva lista filtrada
                 if (tarea2.contains(texto)){
                     listaFiltrada.add(tare);
                 }

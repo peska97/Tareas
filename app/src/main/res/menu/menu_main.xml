@@ -27,6 +27,9 @@
                 <item android:id="@+id/filtrar_nofinalizado"
                     android:title="@string/text_filtrar_nofinalizado"
                     app:showAsAction="never"/>
+                <item android:id="@+id/filtrar_alarma"
+                    android:title="@string/text_filtrar_alarma"
+                    app:showAsAction="never"/>
             </menu>
         </item>
 
