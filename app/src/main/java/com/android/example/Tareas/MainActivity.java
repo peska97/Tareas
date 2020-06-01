@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.android.example.Tareas.R.string.text_mostrartodas;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences settings;
 
+    //SharedPreferences compartido
+    public static Context contextOfApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 //llama al adaptador
                 mOrdenar = 1;
-                adaptador(mOrdenar);
+                adaptador(mOrdenar,"");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     //Actualiza las tareas en cache
                     adapter.setTareas(tareas);
                     //actualiza la lista de tareas
-                    adaptador(mOrdenar);
+                    adaptador(mOrdenar,"");
                 }
             });
 
@@ -158,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
                                         //actualiza la lista de tareas
-                                        adaptador(mOrdenar);
+                                        adaptador(mOrdenar,"");
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
@@ -210,15 +214,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 //comprobar con un toast lo que estas escribiendo
                 Toast.makeText(MainActivity.this,newText,Toast.LENGTH_LONG).show();
+
                 //cambiamos el valor para acceder a buscartarea
                 mOrdenar = 0;
-                //pasamos la parlabra buscar con el SharedPreferences
-                SharedPreferences.Editor edit = settings.edit();
-                edit.putString("buscartarea",newText);
-                edit.commit();
-
-                //llama al adaptador
-                adaptador(mOrdenar);
+                //pasamos la parlabra para buscar al adaptador
+                adaptador(mOrdenar,newText);
 
                 return true;
             }
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 1;
             //llama al adaptador
-            adaptador(mOrdenar);
+            adaptador(mOrdenar,"");
 
             return true;
         }
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 2;
             //llama al adaptador
-            adaptador(mOrdenar);
+            adaptador(mOrdenar,"");
 
             return true;
         }
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 1;
             //llama al adaptador
-            adaptador(mOrdenar);
+            adaptador(mOrdenar,"");
         }
         //filtrar por finalizado
         if (id == R.id.filtrar_finalizado){
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 3;
             //llama al adaptador
-            adaptador(mOrdenar);
+            adaptador(mOrdenar,"");
         }
         //filtrar por no finalizado
         if (id == R.id.filtrar_nofinalizado){
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 4;
             //llama al adaptador
-            adaptador(mOrdenar);
+            adaptador(mOrdenar,"");
         }
         //modo oscuro
         if (id == R.id.night_mode){
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //metodo que llama al adaptador para mostrar la lista
-    public void adaptador(int mOrdenar) {
+    public void adaptador(int mOrdenar, final String newText) {
         //RecyclerView que llama al adaptador
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final TareaListAdapter adapter = new TareaListAdapter(this);
@@ -460,16 +460,14 @@ public class MainActivity extends AppCompatActivity {
 
         //buscar tarea
         if (mOrdenar == 0) {
-            //obtenemos la variable a buscar con el SharedPreferences
-            final String tareabuscar = settings.getString("buscartarea","");
             //llama al dao para hacer la consulta en la BBDD
-            mTareaViewModel.getBuscarTareas().observe(this, new Observer<List<Tarea>>() {
+            mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
                 @Override
                 public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-
-
-
+                    //filtamos con otro metodo
+                    ArrayList<Tarea>listaFiltrada=filter((ArrayList<Tarea>) tareas,newText);
+                    //y pasamos la lista filtrada
+                    adapter.setTareas(listaFiltrada);
                 }
             });
         }
@@ -512,6 +510,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    //filtrar para buscar tareas
+    private ArrayList<Tarea> filter(ArrayList<Tarea> tarea,String texto){
+        ArrayList<Tarea>listaFiltrada = new ArrayList<>();
+        try {
+            texto = texto.toLowerCase();
+            for(Tarea tare: tarea){
+                String tarea2=tare.getTitulo().toLowerCase();
+                if (tarea2.contains(texto)){
+                    listaFiltrada.add(tare);
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaFiltrada;
     }
 
 }

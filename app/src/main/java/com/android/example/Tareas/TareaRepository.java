@@ -11,7 +11,6 @@ public class TareaRepository {
     private TareaDao mTareaDao;
     //lista de palabras
     private LiveData<List<Tarea>> mAllTareas;
-    private LiveData<List<Tarea>> mBuscarTareas;
     private LiveData<List<Tarea>> mAllfechasTareas;
     private LiveData<List<Tarea>> mAllfinalizadoTareas;
     private LiveData<List<Tarea>> mAllnofinalizadoTareas;
@@ -21,7 +20,6 @@ public class TareaRepository {
         TareaRoomDatabase db = TareaRoomDatabase.getDatabase(application);
         mTareaDao = db.TareaDao();
         mAllTareas = mTareaDao.getAllTareas();
-        mBuscarTareas = mTareaDao.getBuscarTareas();
         mAllfechasTareas = mTareaDao.getAllfechasTareas();
         mAllfinalizadoTareas = mTareaDao.getAllfinalizadoTareas();
         mAllnofinalizadoTareas = mTareaDao.getAllnofinalizadoTareas();
@@ -30,9 +28,6 @@ public class TareaRepository {
     //metodo contenedor, notifica cuando los datos cambian
     LiveData<List<Tarea>> getAllTareas() {
         return mAllTareas;
-    }
-    LiveData<List<Tarea>> getBuscarTareas() {
-        return mBuscarTareas;
     }
     LiveData<List<Tarea>> getAllfechasTareas() {
         return mAllfechasTareas;
