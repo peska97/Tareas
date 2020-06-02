@@ -23,11 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.android.example.Tareas.R.string.text_mostrartodas;
 
 public class MainActivity extends AppCompatActivity {
     //var para todas las interacciones de la actividad
