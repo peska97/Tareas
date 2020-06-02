@@ -29,27 +29,36 @@ public interface TareaDao {
     @Query("SELECT * from tarea_table LIMIT 1")
     Tarea[] getAnyTarea();
 
-    //consulta SQL que obtiene todas las palabras por orden alfabetico
+    //consultas SQL para filtrar y ordenar
+    //Ordenar por orden alfabetico
+        //Todas las tareas
     @Query("SELECT * from tarea_table ORDER BY titulo ASC")
     //metodo que debuelve una lista de palabras
     //utilizamos liveData para responder a los cambios de los datos
     LiveData<List<Tarea>> getAllTareas();
+        //Finalizadas
+        @Query("SELECT * from tarea_table WHERE finalizado ORDER BY titulo ASC")
+        LiveData<List<Tarea>> getAllfinalizadoTareas();
+        //No finalizadas
+        @Query("SELECT * from tarea_table WHERE not finalizado ORDER BY titulo ASC")
+        LiveData<List<Tarea>> getAllnofinalizadoTareas();
+        //Alarma activada
+        @Query("SELECT * from tarea_table WHERE  alarmaactivada ORDER BY titulo ASC")
+        LiveData<List<Tarea>> getAllAlarmaTareas();
 
-    //metodo para ordenar por fecha
+    //Ordenar por fecha
+        //Todas las tareas
     @Query("SELECT * from tarea_table ORDER BY fechafin ASC")
     LiveData<List<Tarea>> getAllfechasTareas();
-
-    //metodo para filtrar por finalizadas
-    @Query("SELECT * from tarea_table WHERE finalizado")
-    LiveData<List<Tarea>> getAllfinalizadoTareas();
-
-    //metodo para filtrar por no finalizadas
-    @Query("SELECT * from tarea_table WHERE not finalizado")
-    LiveData<List<Tarea>> getAllnofinalizadoTareas();
-
-    //metodo para filtrar por alarmas activadas
-    @Query("SELECT * from tarea_table WHERE  alarmaactivada")
-    LiveData<List<Tarea>> getAllAlarmaTareas();
+        //Finalizadas
+        @Query("SELECT * from tarea_table WHERE finalizado ORDER BY fechafin ASC")
+        LiveData<List<Tarea>> getAllfinalizadofechaTareas();
+        //No finalizadas
+        @Query("SELECT * from tarea_table WHERE not finalizado ORDER BY fechafin ASC")
+        LiveData<List<Tarea>> getAllnofinalizadofechaTareas();
+        //Alarma activada
+        @Query("SELECT * from tarea_table WHERE  alarmaactivada ORDER BY fechafin ASC")
+        LiveData<List<Tarea>> getAllAlarmafechaTareas();
 
     //metodo para actualizar tareas
     @Update

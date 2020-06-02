@@ -13,10 +13,13 @@ public class TareaViewModel extends AndroidViewModel {
 
     //var almacena el cache la lista de tareas
     private LiveData<List<Tarea>> mAllTareas;
-    private LiveData<List<Tarea>> mAllfechasTareas;
     private LiveData<List<Tarea>> mAllfinalizadoTareas;
     private LiveData<List<Tarea>> mAllnofinalizadoTareas;
     private LiveData<List<Tarea>> mAllAlarmaTareas;
+    private LiveData<List<Tarea>> mAllfechasTareas;
+    private LiveData<List<Tarea>> mAllfinalizadofechaTareas;
+    private LiveData<List<Tarea>> mAllnofinalizadofechaTareas;
+    private LiveData<List<Tarea>> mAllAlarmafechaTareas;
 
     //constructor con las var anteriores
     public TareaViewModel(Application application) {
@@ -27,6 +30,9 @@ public class TareaViewModel extends AndroidViewModel {
         mAllfinalizadoTareas = mRepository.getAllfinalizadoTareas();
         mAllnofinalizadoTareas = mRepository.getAllnofinalizadoTareas();
         mAllAlarmaTareas = mRepository.getAllAlarmaTareas();
+        mAllfinalizadofechaTareas = mRepository.getAllfinalizadofechaTareas();
+        mAllnofinalizadofechaTareas = mRepository.getAllnofinalizadofechaTareas();
+        mAllAlarmafechaTareas = mRepository.getAllAlarmafechaTareas();
     }
 
     //metodo getter para obtener las palabras
@@ -44,6 +50,15 @@ public class TareaViewModel extends AndroidViewModel {
     }
     LiveData<List<Tarea>> getAllAlarmaTareas() {
         return mAllAlarmaTareas;
+    }
+    LiveData<List<Tarea>> getAllfinalizadofechaTareas() {
+        return mAllfinalizadofechaTareas;
+    }
+    LiveData<List<Tarea>> getAllnofinalizadofechaTareas() {
+        return mAllnofinalizadofechaTareas;
+    }
+    LiveData<List<Tarea>> getAllAlarmafechaTareas() {
+        return mAllAlarmafechaTareas;
     }
 
     //metodo insert contenedor, para que este oculta al usuario

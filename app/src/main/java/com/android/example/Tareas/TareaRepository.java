@@ -15,6 +15,9 @@ public class TareaRepository {
     private LiveData<List<Tarea>> mAllfinalizadoTareas;
     private LiveData<List<Tarea>> mAllnofinalizadoTareas;
     private LiveData<List<Tarea>> mAllAlarmaTareas;
+    private LiveData<List<Tarea>> mAllfinalizadofechaTareas;
+    private LiveData<List<Tarea>> mAllnofinalizadofechaTareas;
+    private LiveData<List<Tarea>> mAllAlarmafechaTareas;
 
     //constructor, obtiene identificacion de BBDD e inicializa las variables
     TareaRepository(Application application) {
@@ -25,6 +28,9 @@ public class TareaRepository {
         mAllfinalizadoTareas = mTareaDao.getAllfinalizadoTareas();
         mAllnofinalizadoTareas = mTareaDao.getAllnofinalizadoTareas();
         mAllAlarmaTareas = mTareaDao.getAllAlarmaTareas();
+        mAllfinalizadofechaTareas = mTareaDao.getAllfinalizadofechaTareas();
+        mAllnofinalizadofechaTareas = mTareaDao.getAllnofinalizadofechaTareas();
+        mAllAlarmafechaTareas = mTareaDao.getAllAlarmafechaTareas();
     }
 
     //metodo contenedor, notifica cuando los datos cambian
@@ -39,6 +45,11 @@ public class TareaRepository {
     }
     LiveData<List<Tarea>> getAllnofinalizadoTareas() { return mAllnofinalizadoTareas;}
     LiveData<List<Tarea>> getAllAlarmaTareas() { return mAllAlarmaTareas;}
+    LiveData<List<Tarea>> getAllfinalizadofechaTareas() {
+        return mAllfinalizadofechaTareas;
+    }
+    LiveData<List<Tarea>> getAllnofinalizadofechaTareas() { return mAllnofinalizadofechaTareas;}
+    LiveData<List<Tarea>> getAllAlarmafechaTareas() { return mAllAlarmafechaTareas;}
 
     //contenedor para insert, llama a un subproceso para que la aplicacion no se bloque
     public void insert(Tarea tarea) {

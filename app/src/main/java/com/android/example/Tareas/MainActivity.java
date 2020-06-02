@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA_UPDATE_ALARMAACTIVADA = "extra_alarmaactivada";
     //para ordenar la lista
     public int mOrdenar=1;
+    //para filtrar la lista
+    public int mFiltrar=1;
     //tarea que se pulsa
     public Tarea tareaPulsada;
     //deslizar hacia abajo
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 //llama al adaptador
-                mOrdenar = 1;
-                adaptador(mOrdenar,"");
+                mFiltrar = 1;
+                adaptador(mOrdenar,mFiltrar,"");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     //Actualiza las tareas en cache
                     adapter.setTareas(tareas);
                     //actualiza la lista de tareas
-                    adaptador(mOrdenar,"");
+                    adaptador(mOrdenar,mFiltrar,"");
                 }
             });
 
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
                                         //actualiza la lista de tareas
-                                        adaptador(mOrdenar,"");
+                                        adaptador(mOrdenar,mFiltrar,"");
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
@@ -216,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 //cambiamos el valor para acceder a buscartarea
                 mOrdenar = 0;
                 //pasamos la parlabra para buscar al adaptador
-                adaptador(mOrdenar,newText);
+                adaptador(mOrdenar,mFiltrar,newText);
 
                 return true;
             }
@@ -284,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 1;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
 
             return true;
         }
@@ -296,41 +298,41 @@ public class MainActivity extends AppCompatActivity {
             //Cambiar valor de variable
             mOrdenar = 2;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
 
             return true;
         }
         //filtrar todas
         if (id == R.id.filtrar_todas){
-            Toast.makeText(this, text_mostrartodas, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.text_mostrartodas, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 1;
+            mFiltrar = 1;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
         }
         //filtrar por finalizado
         if (id == R.id.filtrar_finalizado){
             Toast.makeText(this, R.string.text_filtrarfin, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 3;
+            mFiltrar = 2;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
         }
         //filtrar por no finalizado
         if (id == R.id.filtrar_nofinalizado){
             Toast.makeText(this, R.string.text_filtrarnofin, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 4;
+            mFiltrar = 3;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
         }
         //filtrar por alarma activada
         if (id == R.id.filtrar_alarma){
             Toast.makeText(this, R.string.text_filtrar_alarma, Toast.LENGTH_LONG).show();
             //Cambiar valor de variable
-            mOrdenar = 5;
+            mFiltrar = 4;
             //llama al adaptador
-            adaptador(mOrdenar,"");
+            adaptador(mOrdenar,mFiltrar,"");
         }
         //modo oscuro
         if (id == R.id.night_mode){
@@ -454,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //metodo que llama al adaptador para mostrar la lista
-    public void adaptador(int mOrdenar, final String newText) {
+    public void adaptador(int mOrdenar,int mFiltrar, final String newText) {
         //RecyclerView que llama al adaptador
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final TareaListAdapter adapter = new TareaListAdapter(this);
@@ -480,50 +482,84 @@ public class MainActivity extends AppCompatActivity {
 
         //ordenar alfabeticamente
         if (mOrdenar == 1) {
-            mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
+            //filtrar todas
+            if (mFiltrar == 1) {
+                mTareaViewModel.getAllTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
+            //filtra por finalizado
+            if (mFiltrar == 2) {
+                mTareaViewModel.getAllfinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
+                            @Override
+                            public void onChanged(@Nullable final List<Tarea> tareas) {
+                                adapter.setTareas(tareas);
+                            }
+                });
+            }
+            //filtrar por no finalizado
+            if (mFiltrar == 3) {
+                mTareaViewModel.getAllnofinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
+            //filtrar por alarma activada
+            if (mFiltrar == 4) {
+                mTareaViewModel.getAllAlarmaTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
         }
 
         //ordenar por fecha
         if (mOrdenar == 2) {
-            mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
+            //filtrar todas
+            if (mFiltrar == 1) {
+                mTareaViewModel.getAllfechasTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
+            //filtra por finalizado
+            if (mFiltrar == 2) {
+                mTareaViewModel.getAllfinalizadofechaTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
+            //filtrar por no finalizado
+            if (mFiltrar == 3) {
+                mTareaViewModel.getAllnofinalizadofechaTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
+            //filtrar por alarma activada
+            if (mFiltrar == 4) {
+                mTareaViewModel.getAllAlarmafechaTareas().observe(this, new Observer<List<Tarea>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Tarea> tareas) {
+                        adapter.setTareas(tareas);
+                    }
+                });
+            }
 
-        }
-        //filtrar por finalizado
-        if (mOrdenar == 3) {
-            mTareaViewModel.getAllfinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
-        }
-        //filtrar por no finalizado
-        if (mOrdenar == 4) {
-            mTareaViewModel.getAllnofinalizadoTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
-        }
-        //filtrar por alarma activada
-        if (mOrdenar == 5) {
-            mTareaViewModel.getAllAlarmaTareas().observe(this, new Observer<List<Tarea>>() {
-                @Override
-                public void onChanged(@Nullable final List<Tarea> tareas) {
-                    adapter.setTareas(tareas);
-                }
-            });
+
         }
     }
 
