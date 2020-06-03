@@ -32,7 +32,7 @@
     <string name="text_filtrarnofin">No finalizadas</string>
     <string name="text_filtrar_alarma">Alarma activada</string>
     <string name="text_info">Información</string>
-    <string name="text_informacion">Esta app muestra una lista de tareas.\nEn rojo se marcan las finalizadas.\nCuando introduces una fecha y hora de finializacion y marcas Activar alarma se crea una alarma para recordartela.\n Las tareas se pueden borrar deslizandolas a cualquier lado.\nTendremos las opciones de buscar tarea o filtrar y ordenar.</string>
+    <string name="text_informacion">Esta app muestra una lista de tareas.\nEn rojo se marcan las finalizadas.\nCuando introduces una fecha y hora de finializacion y marcas Activar alarma se crea una alarma para recordartela.\n Las tareas se pueden borrar deslizandolas a cualquier lado.\nTendremos las opciones de buscar tarea o filtrar y ordenar.\nAl deslizar hacia abajo se reestablecen los filtros y muestra la lista ordenada alfabeticamente.</string>
 
     <string name="new_notification">Tarea finalizada</string>
     <string name="notificaciontoast">Alarma creada</string>

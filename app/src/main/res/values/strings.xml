@@ -33,7 +33,7 @@
     <string name="text_filtrar_alarma">Alarm activated</string>
     <string name="text_info">Information</string>
     <string name="text_informacion">
-This app shows a list of tasks, those completed are marked in red. When you enter a date and time of completion and Activate alarm marks, an alarm is created to remind you. Tasks can be deleted by sliding them anywhere. We will have the options to search for a task or filter and order.</string>
+This app shows a list of tasks.\nThose completed are marked in red.\nWhen you enter a date and time of completion and Activate alarm marks.\nAn alarm is created to remind you.\nTasks can be deleted by sliding them anywhere.\nWe will have the options to search for a task or filter and order.\nSwiping down resets filters and displays alphabetically ordered list.</string>
 
     <string name="new_notification">Finished work</string>
     <string name="notificaciontoast">Alarm created</string>
