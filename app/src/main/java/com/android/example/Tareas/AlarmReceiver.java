@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-//Recive la alara
+//Recive la alarma
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

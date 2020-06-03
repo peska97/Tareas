@@ -8,6 +8,7 @@
     <color name="colorTextPrimary">#E0E0E0</color>
     <color name="colorScreenBackground">#000000</color>
     <color name="colorTextHint">#E0E0E0</color>
+    <color name="colorRedred">#922B21</color>
     <color name="colorRed">#3E2723</color>
     <color name="colorBlack">#757575</color>
 </resources>
