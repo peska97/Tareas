@@ -31,6 +31,9 @@
     <string name="text_filtrarfin">Finished</string>
     <string name="text_filtrarnofin">Not finished</string>
     <string name="text_filtrar_alarma">Alarm activated</string>
+    <string name="text_info">Information</string>
+    <string name="text_informacion">
+This app shows a list of tasks, those completed are marked in red. When you enter a date and time of completion and Activate alarm marks, an alarm is created to remind you. Tasks can be deleted by sliding them anywhere. We will have the options to search for a task or filter and order.</string>
 
     <string name="new_notification">Finished work</string>
     <string name="notificaciontoast">Alarm created</string>
@@ -46,6 +49,7 @@
     <string name="confirmar">Yes</string>
     <string name="cancelar">No</string>
     <string name="text_alerd_borrar">Confirm</string>
+    <string name="text_ok">Ok</string>
     <string name="night_mode">Night mode</string>
     <string name="day_mode">Day mode</string>
 </resources>

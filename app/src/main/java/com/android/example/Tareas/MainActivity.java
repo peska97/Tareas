@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -228,6 +229,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        //Boton de informacion
+        if (id == R.id.info) {
+            //para confirmar
+            AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+            alerta.setMessage(R.string.text_informacion)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener(){
+                        //si
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog titulo = alerta.create();
+            titulo.setTitle(R.string.text_info);
+            titulo.show();
+
+            return true;
+        }
 
         //Boton pra borrar todo
         if (id == R.id.clear_data) {
