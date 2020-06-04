@@ -16,6 +16,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     //click en item
     private static ClickListener clickListener;
     private Boolean fin = false;
+    private Boolean alarmaactivada = false;
     private int indicador = 0;
 
     TareaListAdapter(Context context) {
@@ -25,22 +26,34 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     @Override
     public TareaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //para cambiar el disseño si la tarea esta finalizada
-        //para que no de error cuando introduces una nueva o cambias datos
+        //para que no de error cuando introduces una nueva o cambias datos y empeza desde 0
         if (indicador==Tareas.size()){
             fin = false;
+            alarmaactivada = false;
         }
         else {
             //Cambiamos una a una el diseño
             fin = Tareas.get(indicador).getFinalizado();
+            alarmaactivada = Tareas.get(indicador).getAlarmaactivada();
             indicador ++;
         }
 
             if (fin == true) {
-                View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
-                return new TareaViewHolder(itemView);
+                if(alarmaactivada == true) {
+                    View itemView = mInflater.inflate(R.layout.recyclerview_itemfin_alarma, parent, false);
+                    return new TareaViewHolder(itemView);
+                } else {
+                    View itemView = mInflater.inflate(R.layout.recyclerview_itemfin, parent, false);
+                    return new TareaViewHolder(itemView);
+                }
             } else {
-                View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-                return new TareaViewHolder(itemView);
+                if(alarmaactivada == true) {
+                    View itemView = mInflater.inflate(R.layout.recyclerview_item_alarma, parent, false);
+                    return new TareaViewHolder(itemView);
+                } else {
+                    View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+                    return new TareaViewHolder(itemView);
+                }
             }
 
     }

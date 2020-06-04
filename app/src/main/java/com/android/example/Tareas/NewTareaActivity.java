@@ -217,16 +217,11 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                         today.set(Calendar.SECOND, 0);
 
 
-
                                     edit.putString("year", salanio);
                                     edit.putString("month", salmes);
                                     edit.putString("day", saldia);
                                     edit.putString("hour", salhora);
                                     edit.putString("minute", salminute);
-
-                                    //Pasar el titulo por SharedPreferences para notificacion
-                                    edit.putString("notificacion", titulo);
-
 
                                     //PARA REINICIO
                                     edit.putInt("alarmID", alarmaidint);

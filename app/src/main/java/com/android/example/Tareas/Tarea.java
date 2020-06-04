@@ -6,13 +6,11 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-
 @Entity(tableName = "tarea_table")
 public class Tarea {
 
     @PrimaryKey(autoGenerate = true)
     private int identificador;
-
 
     @NonNull
     @ColumnInfo(name = "titulo")
@@ -40,8 +38,6 @@ public class Tarea {
     private Boolean alarmaactivada;
 
 
-
-
     public Tarea(@NonNull String titulo, String descripcion, String fecha, String fechafin, String horafin, Boolean finalizado, String alarmaid, Boolean alarmaactivada){
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -65,7 +61,6 @@ public class Tarea {
         this.alarmaid = alarmaid;
         this.alarmaactivada = alarmaactivada;
     }
-
 
 
     public  int getIdentificador() {return this.identificador;}
