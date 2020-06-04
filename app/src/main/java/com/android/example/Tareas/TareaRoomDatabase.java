@@ -58,10 +58,10 @@ public abstract class TareaRoomDatabase extends RoomDatabase {
         private static String [] titulos = {"Ir a la compra", "Limpiar", "Ordenar habitacion", "Estudiar", "Planchar",
                 "Hacer la colada", "Fregar los platos"};
 
-        private static String [] descripciones = {"Ir a la compra d", "Limpiar d", "Ordenar habitacion d", "Estudiar d", "Planchar d",
-                "Hacer la colada d", "Fregar los platos d"};
+        private static String [] descripciones = {"leche, huevos y azucar", "la cocina y el comedor", "y despues barrer y fregar", "Filosofia y matematicas", "camisetas y pantalones",
+                "de ropa blanca y de color", "tambien los basos"};
         private static String fecha = "1/1/1";
-        private static String fechafin = "9/9/9";
+        private static String fechafin = "01/01/2022";
         private static String horafin = "00:00";
         private static Boolean finalizado = false;
         private static String[] alarmaid = {"-1","-2","-3","-4","-5","-6","-7"};

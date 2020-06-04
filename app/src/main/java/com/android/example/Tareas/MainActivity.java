@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -55,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences settings;
 
-    //SharedPreferences compartido
-    public static Context contextOfApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -577,8 +574,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
 
-
         }
+
     }
 
     //filtrar para buscar tareas

@@ -17,6 +17,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
     private static ClickListener clickListener;
     private Boolean fin = false;
     private int indicador = 0;
+
     TareaListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -29,6 +30,7 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
             fin = false;
         }
         else {
+            //Cambiamos una a una el diseño
             fin = Tareas.get(indicador).getFinalizado();
             indicador ++;
         }

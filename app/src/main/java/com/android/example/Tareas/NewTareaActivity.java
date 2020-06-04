@@ -224,6 +224,8 @@ public class NewTareaActivity extends AppCompatActivity implements View.OnClickL
                                     edit.putString("hour", salhora);
                                     edit.putString("minute", salminute);
 
+                                    //Pasar el titulo por SharedPreferences para notificacion
+                                    edit.putString("notificacion", titulo);
 
 
                                     //PARA REINICIO

@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -22,6 +23,7 @@ public class NotificationService extends IntentService {
     private PendingIntent pendingIntent;
     private static int NOTIFICATION_ID = 1;
     Notification notification;
+    private SharedPreferences settings;
 
 
     public NotificationService(String name) {
@@ -41,7 +43,9 @@ public class NotificationService extends IntentService {
         Resources res = this.getResources();
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
-        String message = getString(R.string.new_notification);
+        //pasamos por SharedPreferences el titulo de la tarea
+        settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        String message = settings.getString("notificacion", "");
 
         //Nos aseguramos que la version sdk es la correcta
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -65,7 +69,7 @@ public class NotificationService extends IntentService {
             builder = new NotificationCompat.Builder(context, id);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentTitle(getString(R.string.app_name)).setCategory(Notification.CATEGORY_SERVICE)
+            builder.setContentTitle(getString(R.string.new_notification)).setCategory(Notification.CATEGORY_SERVICE)
                     .setSmallIcon(R.drawable.ic_notif_fin)   // required
                     .setContentText(message)
                     .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_notif_fin))
