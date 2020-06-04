@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/redondeadotareasalarma"
         android:elevation="8dp"
-        android:textAlignment="textStart"
+        android:textAlignment="center"
         tools:text="placeholder text" />
 </LinearLayout>
 
