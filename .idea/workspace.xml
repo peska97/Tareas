@@ -53,11 +53,14 @@
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.android.example.Tareas" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.android.example.Tareas" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
   </component>
   <component name="RunDashboard">

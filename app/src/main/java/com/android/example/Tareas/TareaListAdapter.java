@@ -82,9 +82,11 @@ public class TareaListAdapter extends RecyclerView.Adapter<TareaListAdapter.Tare
         else return 0;
     }
 
-    public Tarea getTareaAtPosition(int position) {
+    public Tarea getTareaAtPosition(List<Tarea> tareas,int position) {
+        Tareas = tareas;
         return Tareas.get(position);
     }
+
 
     class TareaViewHolder extends RecyclerView.ViewHolder {
         private final TextView tareaItemView;
