@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.android.example.Tareas.MainActivity">
+    tools:context="com.android.example.Tareas.app.android.example.Tareas.MainActivity">
 
     <item android:id="@+id/buscar_tarea"
         android:title="Buscar Tarea"

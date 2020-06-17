@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorScreenBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.android.example.Tareas.MainActivity"
+    tools:context="com.android.example.Tareas.app.android.example.Tareas.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.v4.widget.SwipeRefreshLayout
